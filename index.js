@@ -150,7 +150,12 @@ const runSpeedTest = async () => {
         setTimeout(() => {
             runSpeedTest();
         }, 60000);
-    });
+    }).catch((error) => {
+        console.log(error);
+        setTimeout(() => {
+            runSpeedTest();
+        }, 60000);
+    })
 }
 
 httpServer.listen(4000, () => {
