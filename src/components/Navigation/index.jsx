@@ -1,8 +1,10 @@
-import { Box, Spinner, Text } from '@chakra-ui/react';
+import { Box, Spinner, Text, Button } from '@chakra-ui/react';
 import React from 'react';
 import { BsFillHddNetworkFill } from "react-icons/bs";
+import axios from 'axios';
 
 export const Navigation = (props) => {
+
     return (
         <Box zIndex={100}
             boxShadow="sm"
@@ -24,11 +26,11 @@ export const Navigation = (props) => {
                 <Text fontWeight="bold">Network Monitor</Text>
             </Box>
             <Box flexGrow={1} />
-            {props.isTesting && (
+            {props.isTesting ? (
                 <Box>
                     <Spinner />
                 </Box>
-            )}
+            ) : <Button colorScheme='teal' onClick={() => axios.get('/api/tests/run')}>Run Speed Test</Button>}
         </Box>
     )
 }

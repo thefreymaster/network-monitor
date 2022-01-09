@@ -112,6 +112,25 @@ const checkForAnomaly = async (test) => {
     }
 }
 
+const runSingleSpeedTest = async () => {
+    console.log("Running speedtest...");
+    io.emit('testing', true);
+    db.push("/testing", true)
+    universalSpeedtest.runCloudflareCom().then(async (result) => {
+        console.log("Test complete");
+        db.push("/testing", false)
+        io.emit('testing', false);
+        await db.push("/tests", [{ ...result, createdAt: new Date().toISOString() }], false);
+        checkForAnomaly(result);
+        console.log(result);
+        let todayMidnight = new Date();
+        todayMidnight.setHours(0, 0, 0, 0);
+        const tests = db.getData('/')?.tests.filter(test => new Date(test.createdAt).getTime() > todayMidnight.getTime());
+
+        io.emit('update', { tests, averages: getAverages(tests) });
+    });
+}
+
 const runSpeedTest = async () => {
     console.log("Running speedtest...");
     io.emit('testing', true);
@@ -158,6 +177,11 @@ app.get('/api/testing/anomalies', function (req, res) {
     todayMidnight.setHours(0, 0, 0, 0);
     const anomalies = db.getData('/')?.anomaly.filter(test => new Date(test.createdAt).getTime() > todayMidnight.getTime());
     return res.send(anomalies)
+});
+
+app.get('/api/tests/run', function (req, res) {
+    runSingleSpeedTest();
+    return res.send(200);
 });
 
 app.get('/api/tests/all', function (req, res) {
