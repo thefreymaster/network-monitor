@@ -7,7 +7,7 @@ import { Navigation } from './components/Navigation';
 import { SpeedTests } from './components/SpeedTests';
 import { useQuery } from 'react-query'
 
-const socket = io(`http://${process.env.REACT_APP_SERVER_IP}:4000`);
+const socket = io(`http://${process.env.REACT_APP_SERVER_IP}:5500`);
 
 const App = () => {
   const toast = useToast();

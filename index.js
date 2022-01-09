@@ -27,7 +27,7 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
     cors: {
-        origin: ["http://localhost:3000", "http://localhost:4000", `http://${process.env.REACT_APP_SERVER_IP}:4000`],
+        origin: ["http://localhost:3000", "http://localhost:4000", `http://${process.env.REACT_APP_SERVER_IP}:5500`],
         methods: ["GET", "POST"]
     }
 });
@@ -164,7 +164,7 @@ const runSpeedTest = async () => {
     })
 }
 
-httpServer.listen(4000, () => {
+httpServer.listen(5500, () => {
     console.log('Speedtest server running');
     console.log(`Running on IP: ${process.env.REACT_APP_SERVER_IP}`);
     if (!db.getData('/')?.anomaly) {
