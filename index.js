@@ -155,6 +155,15 @@ const runSpeedTest = async () => {
 
 httpServer.listen(4000, () => {
     console.log('Speedtest server running');
+    if (!db.getData('/')?.anomaly) {
+        db.push('/anomaly', [], false);
+    }
+    if (!db.getData('/')?.tests) {
+        db.push('/tests', [], false);
+    }
+    if (db.getData('/')?.testing === undefined) {
+        db.push('/testing', false, false);
+    }
     runSpeedTest();
 });
 
