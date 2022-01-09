@@ -12,11 +12,13 @@ const socket = io(`http://${process.env.REACT_APP_SERVER_IP}:4000`);
 const App = () => {
   const toast = useToast();
   const [tests, setTests] = React.useState();
+  const [anomalies, setAnomalies] = React.useState();
+
   const [isTesting, setTesting] = React.useState(false);
 
   React.useEffect(() => {
     socket.on("update", (db) => {
-      console.log(db)
+      console.log(db);
       setTests(db);
     });
     socket.on("testing", (testing) => {
@@ -36,9 +38,23 @@ const App = () => {
 
   React.useLayoutEffect(() => {
     socket.on("anomaly", (anomalies) => {
-      console.log(anomalies);
+      setAnomalies(anomalies);
     })
-  }, [])
+  }, []);
+
+  React.useLayoutEffect(() => {
+    socket.on("error", (e) => {
+      if (e) {
+        toast({
+          title: 'Error!',
+          description: "An error was encountered fetching latest testing data.",
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        })
+      }
+    })
+  }, []);
 
   React.useLayoutEffect(() => {
     const getTests = async () => {
@@ -49,13 +65,13 @@ const App = () => {
     getTests();
   }, []);
 
-  const { isLoading: isLoadingAnomalies, data: anomalies } = useQuery('anomalies', () => axios.get('/api/testing/anomalies').then(res => res.data));
-  const { isLoading, data } = useQuery('tests', () => axios.get('/api/tests').then(res => res.data));
+  const { isLoading: isLoadingAnomalies } = useQuery('anomalies', () => axios.get('/api/testing/anomalies').then(res => setAnomalies(res.data)));
+  const { isLoading } = useQuery('tests', () => axios.get('/api/tests').then(res => setTests(res.data)));
 
   return (
     <Box>
       <Navigation isTesting={isTesting} />
-      {!(isLoading || isLoadingAnomalies) && <SpeedTests data={data} anomalies={anomalies} />}
+      {!(isLoading || isLoadingAnomalies) && <SpeedTests data={tests} anomalies={anomalies} />}
     </Box>
   )
 }

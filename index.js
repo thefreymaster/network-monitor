@@ -128,7 +128,12 @@ const runSingleSpeedTest = async () => {
         const tests = db.getData('/')?.tests.filter(test => new Date(test.createdAt).getTime() > todayMidnight.getTime());
 
         io.emit('update', { tests, averages: getAverages(tests) });
-    });
+    }).catch((error) => {
+        console.log(error);
+        db.push("/testing", false);
+        io.emit('testing', false);
+        io.emit('error', true);
+    })
 }
 
 const runSpeedTest = async () => {
@@ -152,6 +157,7 @@ const runSpeedTest = async () => {
         }, 60000);
     }).catch((error) => {
         console.log(error);
+        io.emit('error', true);
         setTimeout(() => {
             runSpeedTest();
         }, 60000);
