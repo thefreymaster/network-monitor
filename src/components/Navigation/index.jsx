@@ -1,6 +1,6 @@
 import { Box, Spinner, Text, Button } from '@chakra-ui/react';
 import React from 'react';
-import { BsFillHddNetworkFill } from "react-icons/bs";
+import { BsHddNetwork } from "react-icons/bs";
 import axios from 'axios';
 
 export const Navigation = (props) => {
@@ -21,7 +21,7 @@ export const Navigation = (props) => {
                 backdropFilter: 'blur(8px)',
             }}
         >
-            <BsFillHddNetworkFill />
+            <BsHddNetwork />
             <Box marginLeft="10px">
                 <Text fontWeight="bold">Network Monitor</Text>
             </Box>

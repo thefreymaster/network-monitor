@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import { Box, useToast } from '@chakra-ui/react';
 import { Navigation } from './components/Navigation';
 import { SpeedTests } from './components/SpeedTests';
-import { useQuery } from 'react-query'
+import { useQuery } from 'react-query';
 
 const socket = io(`http://${process.env.REACT_APP_SERVER_IP}:5500`);
 
