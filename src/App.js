@@ -59,7 +59,6 @@ const App = () => {
   React.useLayoutEffect(() => {
     const getTests = async () => {
       const result = await axios.get('/api/testing/status').then(res => res.data);
-      console.log(result)
       setTesting(result);
     }
     getTests();

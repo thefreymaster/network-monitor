@@ -166,6 +166,7 @@ const runSpeedTest = async () => {
 
 httpServer.listen(4000, () => {
     console.log('Speedtest server running');
+    console.log(`Running on IP: ${process.env.REACT_APP_SERVER_IP}`);
     if (!db.getData('/')?.anomaly) {
         db.push('/anomaly', [], false);
     }
@@ -201,7 +202,7 @@ app.get('/api/testing/anomalies', function (req, res) {
 
 app.get('/api/tests/run', function (req, res) {
     runSingleSpeedTest();
-    return res.send(200);
+    return res.sendStatus(200);
 });
 
 app.get('/api/tests/all', function (req, res) {
