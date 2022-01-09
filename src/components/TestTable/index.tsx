@@ -10,7 +10,7 @@ import {
     TableCaption,
     Box,
 } from '@chakra-ui/react'
-import { IAnomaly } from '../../../interfaces';
+import { IAnomaly, ISpeedtest } from '../../interfaces';
 import { Dot } from '../Dot';
 import { capitalizeFirstLetter } from '../../utils/upperCaseFirstLetter';
 
@@ -23,16 +23,17 @@ const getColor = (type: string) => {
     return colors.get(type);
 }
 
-export const Anomalies = (props: {
-    anomalies: Array<IAnomaly>
+export const TestTable = (props: {
+    data: Array<any>,
+    type: 'anomaly' | 'tests'
 }) => {
-    const reversedAnomalies = [...props.anomalies].reverse();
+    const reversedAnomalies = [...props.data].reverse();
     return (
-        <Table variant='simple'>
+        <Table variant='simple' size='sm'>
             <TableCaption>Recently detected anomalies</TableCaption>
             <Thead>
                 <Tr>
-                    <Th>Type</Th>
+                    {props.type === 'anomaly' && <Th>Type</Th>}
                     <Th isNumeric>Download</Th>
                     <Th isNumeric>Upload</Th>
                     <Th isNumeric>Jitter</Th>
@@ -43,7 +44,7 @@ export const Anomalies = (props: {
             <Tbody>
                 {reversedAnomalies.map((anomaly) => (
                     <Tr key={anomaly.createdAt}>
-                        <Td>
+                        {props.type === 'anomaly' && <Td>
                             <Box display="flex" flexDir="row" alignItems="center">
                                 <Box marginRight="2">
                                     <Dot color={getColor(anomaly.type)} />
@@ -52,7 +53,7 @@ export const Anomalies = (props: {
                                     {capitalizeFirstLetter(anomaly.type)}
                                 </Box>
                             </Box>
-                        </Td>
+                        </Td>}
                         <Td isNumeric>{anomaly.downloadSpeed} Mbps</Td>
                         <Td isNumeric>{anomaly.uploadSpeed} Mbps</Td>
                         <Td isNumeric>{anomaly.jitter} ms</Td>
