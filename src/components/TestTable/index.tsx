@@ -3,16 +3,17 @@ import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
+    Tooltip,
     Tr,
     Th,
     Td,
     TableCaption,
     Box,
 } from '@chakra-ui/react'
-import { IAnomaly, ISpeedtest } from '../../interfaces';
 import { Dot } from '../Dot';
-import { capitalizeFirstLetter } from '../../utils/upperCaseFirstLetter';
+import { AiOutlineDownload, AiOutlineUpload } from 'react-icons/ai';
+import { IoIosRadio } from 'react-icons/io';
+import { GiElectric } from 'react-icons/gi';
 
 const getColor = (type: string) => {
     const colors = new Map();
@@ -20,6 +21,15 @@ const getColor = (type: string) => {
     colors.set('upload', '#2A9D8F');
     colors.set('jitter', '#F4A261');
     colors.set('ping', '#E76F51');
+    return colors.get(type);
+}
+
+const getIcon = (type: string) => {
+    const colors = new Map();
+    colors.set('download', <AiOutlineDownload size="18px" color={getColor(type)} />);
+    colors.set('upload', <AiOutlineUpload size="18px" color={getColor(type)} />);
+    colors.set('jitter', <IoIosRadio size="18px" color={getColor(type)} />);
+    colors.set('ping', <GiElectric size="18px" color={getColor(type)} />);
     return colors.get(type);
 }
 
@@ -44,20 +54,20 @@ export const TestTable = (props: {
             <Tbody>
                 {reversedAnomalies.map((anomaly) => (
                     <Tr key={anomaly.createdAt}>
-                        {props.type === 'anomaly' && <Td>
-                            <Box display="flex" flexDir="row" alignItems="center">
-                                <Box marginRight="2">
-                                    <Dot color={getColor(anomaly.type)} />
+                        {props.type === 'anomaly' && (
+                            <Td textAlign='center'>
+                                <Box display="flex" flexDir="row" alignItems="center" justifyContent="center">
+                                    <Box marginRight="6px">
+                                        <Dot color={getColor(anomaly.type)} />
+                                    </Box>
+                                    {getIcon(anomaly.type)}
                                 </Box>
-                                <Box>
-                                    {capitalizeFirstLetter(anomaly.type)}
-                                </Box>
-                            </Box>
-                        </Td>}
-                        <Td isNumeric>{anomaly.downloadSpeed} Mbps</Td>
-                        <Td isNumeric>{anomaly.uploadSpeed} Mbps</Td>
-                        <Td isNumeric>{anomaly.jitter} ms</Td>
-                        <Td isNumeric>{anomaly.ping} ms</Td>
+                            </Td>
+                        )}
+                        <Td isNumeric>{anomaly.downloadSpeed.toFixed(0)} Mbps</Td>
+                        <Td isNumeric>{anomaly.uploadSpeed.toFixed(0)} Mbps</Td>
+                        <Td isNumeric>{anomaly.jitter.toFixed(0)} ms</Td>
+                        <Td isNumeric>{anomaly.ping.toFixed(0)} ms</Td>
                         <Td isNumeric>{new Date(anomaly.createdAt).toLocaleDateString()} at {new Date(anomaly.createdAt).toLocaleTimeString()}</Td>
                     </Tr>
                 ))}

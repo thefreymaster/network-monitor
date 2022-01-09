@@ -5,6 +5,6 @@ export const Dot = (props: {
     color: string
 }) => {
     return (
-        <Box backgroundColor={props.color} borderRadius="50px" width="10px" height="10px" />
+        <Box backgroundColor={props.color} borderRadius="50px" width="8px" height="8px" />
     )
 }

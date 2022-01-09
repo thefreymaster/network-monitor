@@ -26,11 +26,7 @@ export const Navigation = (props) => {
                 <Text fontWeight="bold">Network Monitor</Text>
             </Box>
             <Box flexGrow={1} />
-            {props.isTesting ? (
-                <Box>
-                    <Spinner />
-                </Box>
-            ) : <Button colorScheme='teal' onClick={() => axios.get('/api/tests/run')}>Run Speed Test</Button>}
+            <Button isLoading={props.isTesting} loadingText='Running' colorScheme='teal' onClick={() => axios.get('/api/tests/run')}>Run Speed Test</Button>
         </Box>
     )
 }

@@ -33,7 +33,7 @@ export const SpeedTests = (props: {
     anomalies: Array<any>;
 }) => {
     return (
-        <Box padding={isMobile ? "2" : "10"} style={{ minHeight: 'calc(100vh - 60px)' }} backgroundColor="#f9f9f9" display="flex" flexDir="column" justifyContent="flex-start">
+        <Box padding={isMobile ? "2" : "10"} style={{ height: 'calc(100vh - 60px)' }} backgroundColor="#f9f9f9" display="flex" flexDir="column" justifyContent="flex-start">
             <Box display="flex" flexDir={isMobile ? "column" : "row"}>
                 {Object.entries(props.data?.averages).map(([key, test]) => {
                     return (
@@ -81,11 +81,11 @@ export const SpeedTests = (props: {
                 />
             </Box>
             <Box display="flex" flexDir="row">
-                <Box textAlign='center' maxHeight="310px" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginRight="20px" marginBottom="20px" display="flex" maxW="calc(50vw - 50px)" backgroundColor="white" boxShadow="base" borderRadius="sm">
+                <Box textAlign='center' maxHeight="310px" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginRight="20px" marginBottom="20px" display="flex" maxW="calc(50vw - 50px)" minW="calc(50vw - 50px)" backgroundColor="white" boxShadow="base" borderRadius="sm">
                     <Text fontWeight="bold">Anomalies</Text>
                     <TestTable type="anomaly" data={props.anomalies.reverse()} />
                 </Box>
-                <Box textAlign='center' maxHeight="310px" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginBottom="20px" display="flex" maxW="calc(50vw - 50px)" backgroundColor="white" boxShadow="base" borderRadius="sm">
+                <Box textAlign='center' maxHeight="310px" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginBottom="20px" display="flex" maxW="calc(50vw - 50px)" minW="calc(50vw - 50px)" backgroundColor="white" boxShadow="base" borderRadius="sm">
                     <Text fontWeight="bold">Tests</Text>
                     <TestTable type="tests" data={props.data.tests.reverse()} />
                 </Box>
