@@ -7,7 +7,7 @@ import { isMobile } from 'react-device-detect';
 const StatValue = (props: { children: any, type: string }) => {
     const type = new Map();
     if (props.type.toLowerCase() === 'download' || props.type.toLowerCase() === 'upload') {
-        return (props.children / 100000).toFixed(0);
+        return (props.children / 125000).toFixed(0);
     }
     return props.children.toFixed(0);
 }
@@ -73,7 +73,7 @@ export const SpeedTests = (props: {
                     {
                         "id": "download",
                         "color": "#FFC09F",
-                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.download?.bandwidth / 100000 }))
+                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.download?.bandwidth / 125000 }))
                     }
                 ]}
                 />
@@ -81,7 +81,7 @@ export const SpeedTests = (props: {
                     {
                         "id": "upload",
                         "color": "hsl(51, 100%, 79%)",
-                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.upload?.bandwidth / 100000 }))
+                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.upload?.bandwidth / 125000 }))
                     }
                 ]}
                 />

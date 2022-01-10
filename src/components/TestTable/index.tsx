@@ -64,8 +64,8 @@ export const TestTable = (props: {
                                 </Box>
                             </Td>
                         )}
-                        <Td isNumeric>{(anomaly.download.bandwidth / 100000)?.toFixed(0)} Mbps</Td>
-                        <Td isNumeric>{(anomaly.upload.bandwidth / 100000)?.toFixed(0)} Mbps</Td>
+                        <Td isNumeric>{(anomaly.download.bandwidth / 125000)?.toFixed(0)} Mbps</Td>
+                        <Td isNumeric>{(anomaly.upload.bandwidth / 125000)?.toFixed(0)} Mbps</Td>
                         <Td isNumeric>{anomaly.ping.jitter.toFixed(0)} ms</Td>
                         <Td isNumeric>{anomaly.ping.latency.toFixed(0)} ms</Td>
                         <Td isNumeric>{new Date(anomaly.timestamp).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</Td>
