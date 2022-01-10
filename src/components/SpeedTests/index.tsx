@@ -81,11 +81,11 @@ export const SpeedTests = (props: {
                 />
             </Box>
             <Box display="flex" flexDir={isMobile ? "column" : "row"}>
-                <Box textAlign='center' maxHeight="310px" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginRight="20px" marginBottom="20px" display="flex" maxW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 50px)"} minW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 50px)"} backgroundColor="white" boxShadow="base" borderRadius="sm">
+                <Box textAlign='center' maxHeight="calc(100vh - 547px)" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginRight="20px" marginBottom="20px" display="flex" maxW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 50px)"} minW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 50px)"} backgroundColor="white" boxShadow="base" borderRadius="sm">
                     <Text fontWeight="bold">Anomalies</Text>
                     <TestTable type="anomaly" data={props.anomalies.reverse()} />
                 </Box>
-                <Box textAlign='center' maxHeight="310px" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginBottom="20px" display="flex" maxW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 50px)"} minW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 50px)"} backgroundColor="white" boxShadow="base" borderRadius="sm">
+                <Box textAlign='center' maxHeight="calc(100vh - 547px)" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginBottom="20px" display="flex" maxW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 50px)"} minW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 50px)"} backgroundColor="white" boxShadow="base" borderRadius="sm">
                     <Text fontWeight="bold">Tests</Text>
                     <TestTable type="tests" data={props.data.tests.reverse()} />
                 </Box>
