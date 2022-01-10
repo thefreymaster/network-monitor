@@ -18,11 +18,9 @@ const App = () => {
 
   React.useEffect(() => {
     socket.on("update", (db) => {
-      console.log(db);
       setTests(db);
     });
     socket.on("testing", (testing) => {
-      console.log(testing)
       setTesting(testing);
       if (testing) {
         toast({

@@ -14,7 +14,6 @@ const getUnit = (type: string) => {
 }
 
 const Tooltip = (props: any) => {
-    console.log(props)
     return (
         <Box backgroundColor="white" padding="2" borderRadius="3" boxShadow="xl">
             <Text fontWeight="bold">{new Date(props.point?.data?.x).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
