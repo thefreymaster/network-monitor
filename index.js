@@ -117,7 +117,7 @@ const runSingleSpeedTest = async () => {
     console.log("Running speedtest...");
     io.emit('testing', true);
     db.push("/testing", true)
-    universalSpeedtest.runSpeedtestNet().then(async (result) => {
+    universalSpeedtest.runCloudflareCom().then(async (result) => {
         console.log("Test complete");
         db.push("/testing", false)
         io.emit('testing', false);
@@ -141,7 +141,7 @@ const runSpeedTest = async () => {
     console.log("Running speedtest...");
     io.emit('testing', true);
     db.push("/testing", true)
-    universalSpeedtest.runSpeedtestNet().then(async (result) => {
+    universalSpeedtest.runCloudflareCom().then(async (result) => {
         console.log("Test complete");
         db.push("/testing", false)
         io.emit('testing', false);
