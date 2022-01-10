@@ -164,8 +164,8 @@ const runSpeedTest = async () => {
 const port = 5500;
 
 httpServer.listen(port, () => {
-    console.log('Speedtest server running');
-    console.log(`Running on IP: ${process.env.REACT_APP_SERVER_IP}:${port}`);
+    console.log('Network Monitor running');
+    console.log(`Navigate to: ${process.env.REACT_APP_SERVER_IP}:${port}`);
     if (!db.getData('/')?.anomaly) {
         db.push('/anomaly', [], false);
     }
