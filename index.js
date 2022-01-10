@@ -154,7 +154,7 @@ const runSpeedTest = async () => {
         io.emit('update', { tests, averages: getAverages(tests) });
         setTimeout(() => {
             runSpeedTest();
-        }, 60000);
+        }, 900000);
     }).catch((error) => {
         console.log(error);
         io.emit('error', true);

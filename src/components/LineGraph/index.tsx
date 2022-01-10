@@ -4,12 +4,27 @@ import { Box, Text } from '@chakra-ui/react';
 import { isMobile } from 'react-device-detect';
 import { Dot } from '../Dot';
 
+const getUnit = (type: string) => {
+    const colors = new Map();
+    colors.set('download', 'Mbps');
+    colors.set('upload', 'Mbps');
+    colors.set('jitter', 'ms');
+    colors.set('ping', 'ms');
+    return colors.get(type);
+}
+
+const Tooltip = (props: any) => {
+    return (
+        <Box backgroundColor="white" padding="2" borderRadius="3" boxShadow="xl">{props.point?.data?.y} {getUnit(props.point.serieId)}</Box>
+    )
+}
+
 export const LineGraph = (props: {
     data: any,
     title: string
     color: string,
 }) => {
-    console.log(props)
+
     return (
         <Box marginRight={isMobile ? "0px" : "20px"} marginTop={isMobile ? "20px" : "0px"} backgroundColor="#fff" height="250px" minW="calc((100vw - 140px) / 4)" display="flex" flexDir="column" alignItems="center" justifyContent="center" boxShadow="base" borderRadius="sm">
             <Box
@@ -27,6 +42,7 @@ export const LineGraph = (props: {
                 data={props.data}
                 enableArea
                 enablePointLabel
+                tooltip={Tooltip}
                 margin={{ top: 50, right: 50, bottom: 50, left: 50 }}
                 curve="natural"
                 enablePoints={false}
