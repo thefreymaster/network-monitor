@@ -68,7 +68,7 @@ export const TestTable = (props: {
                         <Td isNumeric>{anomaly.uploadSpeed.toFixed(0)} Mbps</Td>
                         <Td isNumeric>{anomaly.jitter.toFixed(0)} ms</Td>
                         <Td isNumeric>{anomaly.ping.toFixed(0)} ms</Td>
-                        <Td isNumeric>{new Date(anomaly.createdAt).toLocaleDateString()} at {new Date(anomaly.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Td>
+                        <Td isNumeric>{new Date(anomaly.createdAt).toLocaleDateString()} at {new Date(anomaly.createdAt).toLocaleTimeString()}</Td>
                     </Tr>
                 ))}
             </Tbody>
