@@ -1,4 +1,4 @@
-import { Box, Stat, Text, StatLabel, StatNumber } from '@chakra-ui/react';
+import { Box, Stat, Text, StatLabel, StatNumber, Alert, Spinner } from '@chakra-ui/react';
 import React from 'react';
 import { TestTable } from '../TestTable';
 import { LineGraph } from '../LineGraph';
@@ -40,6 +40,16 @@ export const SpeedTests = (props: {
     }
     anomalies: Array<any>;
 }) => {
+    if (props.data.tests.length === 0) {
+        return (
+            <Box  padding={isMobile ? "2" : "10"} style={{ height: 'calc(100vh - 60px)' }} display="flex" flexDir="column" justifyContent="center" alignItems="center">
+                <Alert backgroundColor="#319795" borderRadius="md" maxW="md" status='success' variant='solid'>
+                    <Spinner mr="4" size="sm" />
+                    Running first speed test, please wait
+                </Alert>
+            </Box>
+        )
+    }
     return (
         <Box padding={isMobile ? "2" : "10"} style={{ height: 'calc(100vh - 60px)' }} backgroundColor="#f9f9f9" display="flex" flexDir="column" justifyContent="flex-start">
             <Box display="flex" flexDir="row" flexWrap={isMobile ? "wrap" : "inherit"}>

@@ -159,34 +159,13 @@ const runSpeedTest = async () => {
             runSpeedTest();
         }, 900000);
     }
-
-    // universalSpeedtest.runCloudflareCom().then(async (result) => {
-    //     console.log("Test complete");
-    //     db.push("/testing", false)
-    //     io.emit('testing', false);
-    //     await db.push("/tests", [{ ...result, createdAt: new Date().toISOString() }], false);
-    //     checkForAnomaly(result);
-    //     console.log(result);
-    //     let todayMidnight = new Date();
-    //     todayMidnight.setHours(0, 0, 0, 0);
-    //     const tests = db.getData('/')?.tests.filter(test => new Date(test.createdAt).getTime() > todayMidnight.getTime());
-
-    //     io.emit('update', { tests, averages: getAverages(tests) });
-    //     setTimeout(() => {
-    //         runSpeedTest();
-    //     }, 900000);
-    // }).catch((error) => {
-    //     console.log(error);
-    //     io.emit('error', true);
-    //     setTimeout(() => {
-    //         runSpeedTest();
-    //     }, 60000);
-    // })
 }
 
-httpServer.listen(5500, () => {
+const port = 5500;
+
+httpServer.listen(port, () => {
     console.log('Speedtest server running');
-    console.log(`Running on IP: ${process.env.REACT_APP_SERVER_IP}`);
+    console.log(`Running on IP: ${process.env.REACT_APP_SERVER_IP}:${port}`);
     if (!db.getData('/')?.anomaly) {
         db.push('/anomaly', [], false);
     }
@@ -194,7 +173,7 @@ httpServer.listen(5500, () => {
         db.push('/tests', [], false);
     }
     if (db.getData('/')?.testing === undefined) {
-        db.push('/testing', false, false);
+        db.push('/testing', true, false);
     }
     runSpeedTest();
 });
