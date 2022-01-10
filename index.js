@@ -10,8 +10,8 @@ require('dotenv').config()
 
 const EXPECTED_INTERNET_DOWNLOAD_SPEED = 1000;
 const EXPECTED_INTERNET_UPLOAD_SPEED = 15;
-const EXPECTED_INTERNET_JITTER = 9;
-const EXPECTED_INTERNET_PING = 6;
+const EXPECTED_INTERNET_JITTER = 4;
+const EXPECTED_INTERNET_PING = 10;
 
 const db = new JsonDB(new Config("speedtests", true, true, '/'));
 
