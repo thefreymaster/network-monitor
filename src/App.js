@@ -2,10 +2,14 @@ import './App.css';
 import React from 'react';
 import axios from "axios"
 import { io } from "socket.io-client";
-import { Box, useToast } from '@chakra-ui/react';
+import {
+  Box, useToast,
+} from '@chakra-ui/react';
 import { Navigation } from './components/Navigation';
 import { SpeedTests } from './components/SpeedTests';
 import { useQuery } from 'react-query';
+import { Offline, Online } from "react-detect-offline";
+import { OfflineAlert } from './components/OfflineAlert/index';
 
 const socket = io(`http://${process.env.REACT_APP_SERVER_IP}:5500`);
 
@@ -15,6 +19,7 @@ const App = () => {
   const [anomalies, setAnomalies] = React.useState();
 
   const [isTesting, setTesting] = React.useState(false);
+  const [isError, setError] = React.useState(false);
 
   React.useEffect(() => {
     socket.on("update", (db) => {
@@ -22,9 +27,10 @@ const App = () => {
     });
     socket.on("testing", (testing) => {
       setTesting(testing);
+      debugger
       if (testing) {
         toast({
-          title: 'Running speedtest...',
+          title: 'Running speed test...',
           description: "Gathering new speedtest data.",
           status: 'info',
           duration: 9000,
@@ -43,6 +49,7 @@ const App = () => {
   React.useLayoutEffect(() => {
     socket.on("error", (e) => {
       if (e) {
+        setError(true);
         toast({
           title: 'Error!',
           description: "An error was encountered fetching latest testing data.",
@@ -50,6 +57,9 @@ const App = () => {
           duration: 9000,
           isClosable: true,
         })
+      }
+      else{
+        setError(false);
       }
     })
   }, []);
@@ -67,8 +77,13 @@ const App = () => {
 
   return (
     <Box>
-      <Navigation isTesting={isTesting} />
-      {!(isLoading || isLoadingAnomalies) && <SpeedTests data={tests} anomalies={anomalies} />}
+      <Navigation isError={isError} isTesting={isTesting} />
+      <Online>
+        {!(isLoading || isLoadingAnomalies) && <SpeedTests data={tests} anomalies={anomalies} />}
+      </Online>
+      <Offline>
+        <OfflineAlert setError={setError} />
+      </Offline>
     </Box>
   )
 }

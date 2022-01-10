@@ -1,6 +1,7 @@
-import { Box, Spinner, Text, Button } from '@chakra-ui/react';
+import { Box, Tag, Text, Button, TagLeftIcon, TagLabel, Fade } from '@chakra-ui/react';
 import React from 'react';
 import { BsHddNetwork } from "react-icons/bs";
+import { FiAlertTriangle } from "react-icons/fi";
 import axios from 'axios';
 
 export const Navigation = (props) => {
@@ -25,6 +26,14 @@ export const Navigation = (props) => {
             <Box marginLeft="10px">
                 <Text fontWeight="bold">Network Monitor</Text>
             </Box>
+            <Box flexGrow={1} />
+            <Fade in={props.isError}>
+                <Tag mr="4" size="lg" colorScheme="red">
+                    <TagLeftIcon boxSize='12px' as={FiAlertTriangle} />
+                    <TagLabel>Problems Detected</TagLabel>
+                </Tag>
+                <Box flexGrow={1} />
+            </Fade>
             <Box flexGrow={1} />
             <Button isLoading={props.isTesting} loadingText='Running' colorScheme='teal' onClick={() => axios.get('/api/tests/run')}>Run Speed Test</Button>
         </Box>

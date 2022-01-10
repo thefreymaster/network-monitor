@@ -3,6 +3,7 @@ import { ResponsiveLine } from '@nivo/line'
 import { Box, Text } from '@chakra-ui/react';
 import { isMobile } from 'react-device-detect';
 import { Dot } from '../Dot';
+import { Icon } from '../Icon';
 
 const getUnit = (type: string) => {
     const colors = new Map();
@@ -38,7 +39,10 @@ export const LineGraph = (props: {
                 display="flex"
                 alignItems="center"
             >
-                <Box><Dot color={props.color} /></Box>
+                <Box display="flex" flexDir="row" alignItems="center">
+                    <Dot color={props.color} />
+                    {/* <Icon type={props.title.toLowerCase()} /> */}
+                </Box>
                 <Box marginLeft="1">{props.title}</Box>
             </Box>
             <ResponsiveLine
