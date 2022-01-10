@@ -3,6 +3,8 @@ const { Config } = require('node-json-db/dist/lib/JsonDBConfig');
 const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
+const speedTest = require('speedtest-net');
+
 require('dotenv').config()
 
 
@@ -11,15 +13,7 @@ const EXPECTED_INTERNET_UPLOAD_SPEED = 15;
 const EXPECTED_INTERNET_JITTER = 9;
 const EXPECTED_INTERNET_PING = 6;
 
-const { UniversalSpeedtest, SpeedUnits } = require('universal-speedtest');
-
 const db = new JsonDB(new Config("speedtests", true, true, '/'));
-
-const universalSpeedtest = new UniversalSpeedtest({
-    measureUpload: true,
-    wait: true,
-    downloadUnit: SpeedUnits.Mbps
-});
 
 const path = require("path");
 
@@ -42,19 +36,19 @@ io.on("connection", (socket) => {
 
 const getAverages = (tests) => {
     const download = tests.reduce((a, b) => {
-        return a + b.downloadSpeed;
+        return a + b.download.bandwidth;
     }, 0);
 
     const upload = tests.reduce((a, b) => {
-        return a + b.uploadSpeed;
+        return a + b.upload.bandwidth;
     }, 0);
 
     const jitter = tests.reduce((a, b) => {
-        return a + b.jitter;
+        return a + b.ping.jitter;
     }, 0);
 
     const ping = tests.reduce((a, b) => {
-        return a + b.ping;
+        return a + b.ping.latency;
     }, 0);
 
     return {
@@ -84,29 +78,29 @@ const getAverages = (tests) => {
 const checkForAnomaly = async (test) => {
     let todayMidnight = new Date();
     todayMidnight.setHours(0, 0, 0, 0);
-    const anomalies = db.getData('/')?.anomaly.filter(test => new Date(test.createdAt).getTime() > todayMidnight.getTime());
+    const anomalies = db.getData('/')?.anomaly.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
 
     let anomaly;
-    if (test.downloadSpeed / EXPECTED_INTERNET_DOWNLOAD_SPEED < 0.6) {
-        anomaly = { ...test, createdAt: new Date().toISOString(), type: 'download' }
+    if (test.download.bandwidth / EXPECTED_INTERNET_DOWNLOAD_SPEED < 0.6) {
+        anomaly = { ...test, type: 'download' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
-    if (test.uploadSpeed / EXPECTED_INTERNET_UPLOAD_SPEED < 0.6) {
-        anomaly = { ...test, createdAt: new Date().toISOString(), type: 'upload' }
+    if (test.upload.bandwidth / EXPECTED_INTERNET_UPLOAD_SPEED < 0.6) {
+        anomaly = { ...test, type: 'upload' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
-    if (test.uploadSpeed / EXPECTED_INTERNET_JITTER < 0.6) {
-        anomaly = { ...test, createdAt: new Date().toISOString(), type: 'jitter' }
+    if (test.ping.jitter / EXPECTED_INTERNET_JITTER < 0.6) {
+        anomaly = { ...test, type: 'jitter' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
-    if (test.uploadSpeed / EXPECTED_INTERNET_PING < 0.6) {
-        anomaly = { ...test, createdAt: new Date().toISOString(), type: 'ping' }
+    if (test.ping.latency / EXPECTED_INTERNET_PING < 0.6) {
+        anomaly = { ...test, type: 'ping' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
@@ -116,53 +110,78 @@ const checkForAnomaly = async (test) => {
 const runSingleSpeedTest = async () => {
     console.log("Running speedtest...");
     io.emit('testing', true);
-    db.push("/testing", true)
-    universalSpeedtest.runCloudflareCom().then(async (result) => {
+    io.emit('error', false);
+    db.push("/testing", true);
+    try {
+        const result = await speedTest({ acceptLicense: true, acceptGdpr: true });
         console.log("Test complete");
         db.push("/testing", false)
         io.emit('testing', false);
-        await db.push("/tests", [{ ...result, createdAt: new Date().toISOString() }], false);
+        await db.push("/tests", [result], false);
         checkForAnomaly(result);
         console.log(result);
         let todayMidnight = new Date();
         todayMidnight.setHours(0, 0, 0, 0);
-        const tests = db.getData('/')?.tests.filter(test => new Date(test.createdAt).getTime() > todayMidnight.getTime());
+        const tests = db.getData('/')?.tests.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
 
         io.emit('update', { tests, averages: getAverages(tests) });
-    }).catch((error) => {
+    } catch (error) {
         console.log(error);
-        db.push("/testing", false);
-        io.emit('testing', false);
         io.emit('error', true);
-    })
+    }
 }
 
 const runSpeedTest = async () => {
     console.log("Running speedtest...");
     io.emit('testing', true);
-    db.push("/testing", true)
-    universalSpeedtest.runCloudflareCom().then(async (result) => {
+    io.emit('error', false);
+    db.push("/testing", true);
+    try {
+        const result = await speedTest({ acceptLicense: true, acceptGdpr: true });
         console.log("Test complete");
         db.push("/testing", false)
         io.emit('testing', false);
-        await db.push("/tests", [{ ...result, createdAt: new Date().toISOString() }], false);
+        await db.push("/tests", [result], false);
         checkForAnomaly(result);
         console.log(result);
         let todayMidnight = new Date();
         todayMidnight.setHours(0, 0, 0, 0);
-        const tests = db.getData('/')?.tests.filter(test => new Date(test.createdAt).getTime() > todayMidnight.getTime());
+        const tests = db.getData('/')?.tests.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
 
         io.emit('update', { tests, averages: getAverages(tests) });
         setTimeout(() => {
             runSpeedTest();
         }, 900000);
-    }).catch((error) => {
+    } catch (error) {
         console.log(error);
         io.emit('error', true);
         setTimeout(() => {
             runSpeedTest();
-        }, 60000);
-    })
+        }, 900000);
+    }
+
+    // universalSpeedtest.runCloudflareCom().then(async (result) => {
+    //     console.log("Test complete");
+    //     db.push("/testing", false)
+    //     io.emit('testing', false);
+    //     await db.push("/tests", [{ ...result, createdAt: new Date().toISOString() }], false);
+    //     checkForAnomaly(result);
+    //     console.log(result);
+    //     let todayMidnight = new Date();
+    //     todayMidnight.setHours(0, 0, 0, 0);
+    //     const tests = db.getData('/')?.tests.filter(test => new Date(test.createdAt).getTime() > todayMidnight.getTime());
+
+    //     io.emit('update', { tests, averages: getAverages(tests) });
+    //     setTimeout(() => {
+    //         runSpeedTest();
+    //     }, 900000);
+    // }).catch((error) => {
+    //     console.log(error);
+    //     io.emit('error', true);
+    //     setTimeout(() => {
+    //         runSpeedTest();
+    //     }, 60000);
+    // })
 }
 
 httpServer.listen(5500, () => {
@@ -185,7 +204,7 @@ app.use(express.static(__dirname + '/build'));
 app.get('/api/tests', function (req, res) {
     let todayMidnight = new Date();
     todayMidnight.setHours(0, 0, 0, 0);
-    const tests = db.getData('/')?.tests.filter(test => new Date(test.createdAt).getTime() > todayMidnight.getTime());
+    const tests = db.getData('/')?.tests.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
     return res.send({ tests, averages: getAverages(tests) })
 });
 
@@ -197,7 +216,7 @@ app.get('/api/testing/status', function (req, res) {
 app.get('/api/testing/anomalies', function (req, res) {
     let todayMidnight = new Date();
     todayMidnight.setHours(0, 0, 0, 0);
-    const anomalies = db.getData('/')?.anomaly.filter(test => new Date(test.createdAt).getTime() > todayMidnight.getTime());
+    const anomalies = db.getData('/')?.anomaly.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
     return res.send(anomalies)
 });
 
@@ -209,6 +228,11 @@ app.get('/api/tests/run', function (req, res) {
 app.get('/api/tests/all', function (req, res) {
     const tests = db.getData('/')?.tests;
     return res.send({ tests, averages: getAverages(tests) })
+});
+
+app.get('/api/testing/new', async (req, res) => {
+    const result = await speedTest({ acceptLicense: true, acceptGdpr: true });
+    return res.send(result)
 });
 
 app.get('/*', function (request, response) {

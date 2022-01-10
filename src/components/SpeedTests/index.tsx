@@ -4,6 +4,14 @@ import { TestTable } from '../TestTable';
 import { LineGraph } from '../LineGraph';
 import { isMobile } from 'react-device-detect';
 
+const StatValue = (props: { children: any, type: string }) => {
+    const type = new Map();
+    if (props.type.toLowerCase() === 'download' || props.type.toLowerCase() === 'upload') {
+        return (props.children / 100000).toFixed(0);
+    }
+    return props.children.toFixed(0);
+}
+
 export const SpeedTests = (props: {
     data: {
         tests: Array<any>,
@@ -40,7 +48,11 @@ export const SpeedTests = (props: {
                         <Box padding="30px" margin={isMobile ? "5px" : "0px 20px 0px 0px"} marginBottom={isMobile ? "10px" : "20px"} display="flex" maxW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 140px) / 4)"} minW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 140px) / 4)"} backgroundColor="white" boxShadow="base" borderRadius="sm">
                             <Stat>
                                 <StatLabel>{test.label}</StatLabel>
-                                <StatNumber>{test.value.toFixed(0)} {test.units}</StatNumber>
+                                <StatNumber>
+                                    <StatValue type={test.label}>{test.value}</StatValue>
+                                    {' '}
+                                    {test.units}
+                                </StatNumber>
                             </Stat>
                         </Box>
                     )
@@ -51,7 +63,7 @@ export const SpeedTests = (props: {
                     {
                         "id": "download",
                         "color": "#FFC09F",
-                        "data": props.data.tests.map(test => ({ x: test.createdAt, y: test.downloadSpeed }))
+                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.download?.bandwidth / 100000 }))
                     }
                 ]}
                 />
@@ -59,7 +71,7 @@ export const SpeedTests = (props: {
                     {
                         "id": "upload",
                         "color": "hsl(51, 100%, 79%)",
-                        "data": props.data.tests.map(test => ({ x: test.createdAt, y: test.uploadSpeed }))
+                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.upload?.bandwidth / 100000 }))
                     }
                 ]}
                 />
@@ -67,7 +79,7 @@ export const SpeedTests = (props: {
                     {
                         "id": "jitter",
                         "color": "hsl(268, 70%, 50%)",
-                        "data": props.data.tests.map(test => ({ x: test.createdAt, y: test.jitter }))
+                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.ping?.jitter }))
                     }
                 ]}
                 />
@@ -75,7 +87,7 @@ export const SpeedTests = (props: {
                     {
                         "id": "ping",
                         "color": "hsl(268, 70%, 50%)",
-                        "data": props.data.tests.map(test => ({ x: test.createdAt, y: test.ping }))
+                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.ping?.latency }))
                     }
                 ]}
                 />

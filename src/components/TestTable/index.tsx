@@ -53,7 +53,7 @@ export const TestTable = (props: {
             </Thead>
             <Tbody>
                 {reversedAnomalies.map((anomaly) => (
-                    <Tr key={anomaly.createdAt}>
+                    <Tr key={anomaly.timestamp}>
                         {props.type === 'anomaly' && (
                             <Td textAlign='center'>
                                 <Box display="flex" flexDir="row" alignItems="center" justifyContent="center">
@@ -64,11 +64,11 @@ export const TestTable = (props: {
                                 </Box>
                             </Td>
                         )}
-                        <Td isNumeric>{anomaly.downloadSpeed.toFixed(0)} Mbps</Td>
-                        <Td isNumeric>{anomaly.uploadSpeed.toFixed(0)} Mbps</Td>
-                        <Td isNumeric>{anomaly.jitter.toFixed(0)} ms</Td>
-                        <Td isNumeric>{anomaly.ping.toFixed(0)} ms</Td>
-                        <Td isNumeric>{new Date(anomaly.createdAt).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</Td>
+                        <Td isNumeric>{anomaly.download.bandwidth?.toFixed(0)} Mbps</Td>
+                        <Td isNumeric>{anomaly.upload.bandwidth.toFixed(0)} Mbps</Td>
+                        <Td isNumeric>{anomaly.ping.jitter.toFixed(0)} ms</Td>
+                        <Td isNumeric>{anomaly.ping.latency.toFixed(0)} ms</Td>
+                        <Td isNumeric>{new Date(anomaly.timestamp).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</Td>
                     </Tr>
                 ))}
             </Tbody>

@@ -13,6 +13,8 @@ speedtests.json
 
 # build
 /build
+./build
+build
 
 # misc
 .env

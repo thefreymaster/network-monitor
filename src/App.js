@@ -27,7 +27,6 @@ const App = () => {
     });
     socket.on("testing", (testing) => {
       setTesting(testing);
-      debugger
       if (testing) {
         toast({
           title: 'Running speed test...',
