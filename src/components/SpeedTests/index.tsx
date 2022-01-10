@@ -34,10 +34,10 @@ export const SpeedTests = (props: {
 }) => {
     return (
         <Box padding={isMobile ? "2" : "10"} style={{ height: 'calc(100vh - 60px)' }} backgroundColor="#f9f9f9" display="flex" flexDir="column" justifyContent="flex-start">
-            <Box display="flex" flexDir="row" flexWrap="wrap">
+            <Box display="flex" flexDir="row" flexWrap={isMobile ? "wrap" : "inherit"}>
                 {Object.entries(props.data?.averages).map(([key, test]) => {
                     return (
-                        <Box padding="30px" margin={isMobile ? "5px" : "20px"} marginBottom={isMobile ? "10px" : "20px"} display="flex" maxW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 140px) / 4)"} minW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 140px) / 4)"} backgroundColor="white" boxShadow="base" borderRadius="sm">
+                        <Box padding="30px" margin={isMobile ? "5px" : "0px 20px 0px 0px"} marginBottom={isMobile ? "10px" : "20px"} display="flex" maxW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 140px) / 4)"} minW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 140px) / 4)"} backgroundColor="white" boxShadow="base" borderRadius="sm">
                             <Stat>
                                 <StatLabel>{test.label}</StatLabel>
                                 <StatNumber>{test.value.toFixed(0)} {test.units}</StatNumber>
