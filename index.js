@@ -79,27 +79,28 @@ const checkForAnomaly = async (test) => {
     let todayMidnight = new Date();
     todayMidnight.setHours(0, 0, 0, 0);
     const anomalies = db.getData('/')?.anomaly.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
+    const averages = db.getData('/')?.averages;
 
     let anomaly;
-    if (test.download.bandwidth / EXPECTED_INTERNET_DOWNLOAD_SPEED < 0.6) {
+    if (test.download.bandwidth / averages?.download?.value < 0.6) {
         anomaly = { ...test, type: 'download' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
-    if (test.upload.bandwidth / EXPECTED_INTERNET_UPLOAD_SPEED < 0.6) {
+    if (test.upload.bandwidth / averages?.upload.bandwidth < 0.6) {
         anomaly = { ...test, type: 'upload' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
-    if (test.ping.jitter / EXPECTED_INTERNET_JITTER < 0.6) {
+    if (test.ping.jitter / averages.jitter.value < 0.6) {
         anomaly = { ...test, type: 'jitter' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
-    if (test.ping.latency / EXPECTED_INTERNET_PING < 0.6) {
+    if (test.ping.latency / averages.ping.ping < 0.6) {
         anomaly = { ...test, type: 'ping' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
@@ -123,8 +124,10 @@ const runSingleSpeedTest = async () => {
         let todayMidnight = new Date();
         todayMidnight.setHours(0, 0, 0, 0);
         const tests = db.getData('/')?.tests.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
+        const averages = getAverages(tests)
+        io.emit('update', { tests, averages });
+        await db.push("/averages", averages, true);
 
-        io.emit('update', { tests, averages: getAverages(tests) });
     } catch (error) {
         console.log(error);
         io.emit('error', true);
@@ -148,7 +151,10 @@ const runSpeedTest = async () => {
         todayMidnight.setHours(0, 0, 0, 0);
         const tests = db.getData('/')?.tests.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
 
-        io.emit('update', { tests, averages: getAverages(tests) });
+        const averages = getAverages(tests)
+        io.emit('update', { tests, averages });
+        await db.push("/averages", averages, true);
+
         setTimeout(() => {
             runSpeedTest();
         }, 900000);
@@ -184,7 +190,8 @@ app.get('/api/tests', function (req, res) {
     let todayMidnight = new Date();
     todayMidnight.setHours(0, 0, 0, 0);
     const tests = db.getData('/')?.tests.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
-    return res.send({ tests, averages: getAverages(tests) })
+    const averages = getAverages(tests)
+    return res.send({ tests, averages })
 });
 
 app.get('/api/testing/status', function (req, res) {
@@ -206,7 +213,8 @@ app.get('/api/tests/run', function (req, res) {
 
 app.get('/api/tests/all', function (req, res) {
     const tests = db.getData('/')?.tests;
-    return res.send({ tests, averages: getAverages(tests) })
+    const averages = getAverages(tests);
+    return res.send({ tests, averages })
 });
 
 app.get('/api/testing/new', async (req, res) => {

@@ -35,12 +35,13 @@ const getIcon = (type: string) => {
 
 export const TestTable = (props: {
     data: Array<any>,
-    type: 'anomaly' | 'tests'
+    type: 'anomaly' | 'tests',
+    caption: string;
 }) => {
     const reversedAnomalies = [...props.data].reverse();
     return (
         <Table variant='simple' size='sm'>
-            <TableCaption>Recently detected anomalies</TableCaption>
+            <TableCaption>{props.caption}</TableCaption>
             <Thead>
                 <Tr>
                     {props.type === 'anomaly' && <Th>Type</Th>}
