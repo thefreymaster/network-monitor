@@ -71,7 +71,7 @@ export const SpeedTests = (props: {
                     )
                 })}
             </Box>
-            <Box display="flex" flexWrap={isMobile ? "wrap" : "inherit"} flexDir={isMobile ? "column" : "row"} minW="100%">
+            <Box display="flex" flexWrap={isMobile ? "wrap" : "inherit"} flexDir={isMobile ? "row" : "row"} minW="100%">
                 <LineGraph title="Download" color="#264653" data={[
                     {
                         "id": "download",
