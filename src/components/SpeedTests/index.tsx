@@ -76,7 +76,7 @@ export const SpeedTests = (props: {
                     {
                         "id": "download",
                         "color": "#FFC09F",
-                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.download?.bandwidth / 125000 }))
+                        "data": props.data.tests.reverse().map(test => ({ x: test.timestamp, y: test?.download?.bandwidth / 125000 }))
                     }
                 ]}
                 />
@@ -84,7 +84,7 @@ export const SpeedTests = (props: {
                     {
                         "id": "upload",
                         "color": "hsl(51, 100%, 79%)",
-                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.upload?.bandwidth / 125000 }))
+                        "data": props.data.tests.reverse().map(test => ({ x: test.timestamp, y: test?.upload?.bandwidth / 125000 }))
                     }
                 ]}
                 />
@@ -92,7 +92,7 @@ export const SpeedTests = (props: {
                     {
                         "id": "jitter",
                         "color": "hsl(268, 70%, 50%)",
-                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.ping?.jitter }))
+                        "data": props.data.tests.reverse().map(test => ({ x: test.timestamp, y: test?.ping?.jitter }))
                     }
                 ]}
                 />
@@ -100,7 +100,7 @@ export const SpeedTests = (props: {
                     {
                         "id": "ping",
                         "color": "hsl(268, 70%, 50%)",
-                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.ping?.latency }))
+                        "data": props.data.tests.reverse().map(test => ({ x: test.timestamp, y: test?.ping?.latency }))
                     }
                 ]}
                 />
