@@ -52,8 +52,8 @@ export const LineGraph = (props: {
                 enableArea
                 enablePointLabel
                 tooltip={Tooltip}
-                margin={{ top: 50, right: 50, bottom: 50, left: 50 }}
-                curve="natural"
+                margin={{ top: 10, right: 0, bottom: 0, left: 30 }}
+                curve="linear"
                 enablePoints={false}
                 useMesh
                 enableGridX={false}
