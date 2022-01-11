@@ -18,7 +18,7 @@ const Tooltip = (props: any) => {
     return (
         <Box backgroundColor="white" padding="2" borderRadius="3" boxShadow="xl">
             <Text fontWeight="bold">{new Date(props.point?.data?.x).toLocaleString([], { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</Text>
-            <Text>{props.point?.data?.y} {getUnit(props.point.serieId)}</Text>
+            <Text>{props.point?.data?.y?.toFixed(0)} {getUnit(props.point.serieId)}</Text>
         </Box>
     )
 }
