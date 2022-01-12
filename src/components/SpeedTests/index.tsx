@@ -1,8 +1,10 @@
-import { Box, Stat, Text, StatLabel, StatNumber, Alert, Spinner } from '@chakra-ui/react';
+import { Box, Stat, Text, StatLabel, StatNumber, Alert, Spinner, Fade } from '@chakra-ui/react';
 import React from 'react';
 import { TestTable } from '../TestTable';
 import { LineGraph } from '../LineGraph';
 import { isMobile } from 'react-device-detect';
+import { Welcome } from '../Welcome';
+import { GREEN, GREY, ORANGE, RED } from '../../constants';
 
 const StatValue = (props: { children: any, type: string }) => {
     const type = new Map();
@@ -39,14 +41,24 @@ export const SpeedTests = (props: {
         }
     }
     anomalies: Array<any>;
+    isTesting: boolean;
 }) => {
+    if (props.data.tests.length === 0 && props.isTesting) {
+        return (
+            <Fade in>
+                <Box padding={isMobile ? "2" : "10"} style={{ height: 'calc(100vh - 60px)' }} display="flex" flexDir="column" justifyContent="center" alignItems="center">
+                    <Alert backgroundColor="#319795" borderRadius="md" maxW="md" status='success' variant='solid'>
+                        <Spinner mr="4" size="sm" />
+                        Running first speed test, please wait
+                    </Alert>
+                </Box>
+            </Fade>
+        )
+    }
     if (props.data.tests.length === 0) {
         return (
-            <Box padding={isMobile ? "2" : "10"} style={{ height: 'calc(100vh - 60px)' }} display="flex" flexDir="column" justifyContent="center" alignItems="center">
-                <Alert backgroundColor="#319795" borderRadius="md" maxW="md" status='success' variant='solid'>
-                    <Spinner mr="4" size="sm" />
-                    Running first speed test, please wait
-                </Alert>
+            <Box maxW="md">
+                <Welcome />
             </Box>
         )
     }
@@ -72,35 +84,35 @@ export const SpeedTests = (props: {
                 })}
             </Box>
             <Box display="flex" flexWrap={isMobile ? "wrap" : "inherit"} flexDir={isMobile ? "row" : "row"} minW="100%">
-                <LineGraph title="Download" color="#264653" data={[
+                <LineGraph title="Download" color={GREY} data={[
                     {
                         "id": "download",
                         "color": "#FFC09F",
-                        "data": props.data.tests.reverse().map(test => ({ x: test.timestamp, y: test?.download?.bandwidth / 125000 }))
+                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.download?.bandwidth / 125000 }))
                     }
                 ]}
                 />
-                <LineGraph title="Upload" color="#2A9D8F" data={[
+                <LineGraph title="Upload" color={GREEN} data={[
                     {
                         "id": "upload",
                         "color": "hsl(51, 100%, 79%)",
-                        "data": props.data.tests.reverse().map(test => ({ x: test.timestamp, y: test?.upload?.bandwidth / 125000 }))
+                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.upload?.bandwidth / 125000 }))
                     }
                 ]}
                 />
-                <LineGraph title="Jitter" color="#F4A261" data={[
+                <LineGraph title="Jitter" color={ORANGE} data={[
                     {
                         "id": "jitter",
                         "color": "hsl(268, 70%, 50%)",
-                        "data": props.data.tests.reverse().map(test => ({ x: test.timestamp, y: test?.ping?.jitter }))
+                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.ping?.jitter }))
                     }
                 ]}
                 />
-                <LineGraph title="Ping" color="#E76F51" data={[
+                <LineGraph title="Ping" color={RED} data={[
                     {
                         "id": "ping",
                         "color": "hsl(268, 70%, 50%)",
-                        "data": props.data.tests.reverse().map(test => ({ x: test.timestamp, y: test?.ping?.latency }))
+                        "data": props.data.tests.map(test => ({ x: test.timestamp, y: test?.ping?.latency }))
                     }
                 ]}
                 />
@@ -108,11 +120,11 @@ export const SpeedTests = (props: {
             <Box display="flex" flexDir={isMobile ? "column" : "row"}>
                 <Box textAlign='center' maxHeight="calc(100vh - 508px)" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginRight="20px" marginBottom="20px" display="flex" maxW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} minW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} backgroundColor="white" boxShadow="base" borderRadius="sm">
                     <Text fontWeight="bold">Anomalies</Text>
-                    <TestTable caption="Today's anomalies" type="anomaly" data={props.anomalies.reverse()} />
+                    <TestTable caption="Today's anomalies" type="anomaly" data={props.anomalies} />
                 </Box>
                 <Box textAlign='center' maxHeight="calc(100vh - 508px)" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginBottom="20px" display="flex" maxW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} minW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} backgroundColor="white" boxShadow="base" borderRadius="sm">
                     <Text fontWeight="bold">Tests</Text>
-                    <TestTable caption="Today's tests" type="tests" data={props.data.tests.reverse()} />
+                    <TestTable caption="Today's tests" type="tests" data={props.data.tests} />
                 </Box>
             </Box>
         </Box>

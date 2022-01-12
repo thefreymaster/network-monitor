@@ -24,7 +24,7 @@ const getColor = (type: string) => {
     return colors.get(type);
 }
 
-const getIcon = (type: string) => {
+export const getIcon = (type: string) => {
     const colors = new Map();
     colors.set('download', <AiOutlineDownload size="18px" color={getColor(type)} />);
     colors.set('upload', <AiOutlineUpload size="18px" color={getColor(type)} />);

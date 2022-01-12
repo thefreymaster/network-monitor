@@ -27,7 +27,7 @@ const App = () => {
     });
     socket.on("testing", (testing) => {
       setTesting(testing);
-      if (testing) {
+      if (testing && tests?.length > 0) {
         toast({
           title: 'Running speed test...',
           description: "Gathering new speedtest data.",
@@ -57,7 +57,7 @@ const App = () => {
           isClosable: true,
         })
       }
-      else{
+      else {
         setError(false);
       }
     })
@@ -74,17 +74,21 @@ const App = () => {
   const { isLoading: isLoadingAnomalies } = useQuery('anomalies', () => axios.get('/api/testing/anomalies').then(res => setAnomalies(res.data)));
   const { isLoading } = useQuery('tests', () => axios.get('/api/tests').then(res => setTests(res.data)));
 
-  return (
-    <Box>
-      <Navigation isError={isError} isTesting={isTesting} />
-      <Online>
-        {!(isLoading || isLoadingAnomalies) && <SpeedTests data={tests} anomalies={anomalies} />}
-      </Online>
-      <Offline>
-        <OfflineAlert setError={setError} />
-      </Offline>
-    </Box>
-  )
+  const memorizedApp = React.useMemo(() => {
+    return (
+      <Box>
+        <Navigation isError={isError} isTesting={isTesting} socket={socket} />
+        <Online>
+          {!(isLoading || isLoadingAnomalies) && <SpeedTests data={tests} anomalies={anomalies} isTesting={isTesting} />}
+        </Online>
+        <Offline>
+          <OfflineAlert setError={setError} />
+        </Offline>
+      </Box>
+    )
+  }, [anomalies, isError, isLoading, isLoadingAnomalies, isTesting, tests])
+  return memorizedApp
+
 }
 
 export default App;

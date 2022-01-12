@@ -7,12 +7,6 @@ const speedTest = require('speedtest-net');
 
 require('dotenv').config()
 
-
-const EXPECTED_INTERNET_DOWNLOAD_SPEED = 1000;
-const EXPECTED_INTERNET_UPLOAD_SPEED = 15;
-const EXPECTED_INTERNET_JITTER = 4;
-const EXPECTED_INTERNET_PING = 10;
-
 const db = new JsonDB(new Config("speedtests", true, true, '/'));
 
 const path = require("path");
@@ -82,30 +76,45 @@ const checkForAnomaly = async (test) => {
     const averages = db.getData('/')?.averages;
 
     let anomaly;
-    if (test.download.bandwidth / averages?.download?.value < 0.6) {
+    if (test.download.bandwidth / averages?.download?.value < 0.8) {
         anomaly = { ...test, type: 'download' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
-    if (test.upload.bandwidth / averages?.upload.bandwidth < 0.6) {
+    if (test.upload.bandwidth / averages?.upload.bandwidth < 0.8) {
         anomaly = { ...test, type: 'upload' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
-    if (test.ping.jitter / averages.jitter.value < 0.6) {
+    if (test.ping.jitter / averages.jitter.value > 1.2) {
         anomaly = { ...test, type: 'jitter' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
-    if (test.ping.latency / averages.ping.ping < 0.6) {
+    if (test.ping.latency / averages.ping.ping > 1.2) {
         anomaly = { ...test, type: 'ping' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
+}
+
+const getHealth = async () => {
+    const todayMidnight = new Date();
+    todayMidnight.setHours(0, 0, 0, 0);
+    const defaults = await db.getData('/')?.defaults;
+    const tests = await db.getData('/')?.tests.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
+    const averages = await getAverages(tests);
+    const health = {
+        download: ((averages.download?.value / 125000) / defaults.download) * 100,
+        upload: ((averages.upload?.value / 125000) / defaults.upload) * 100,
+        jitter: ((averages.jitter?.value) / defaults.jitter) * 100 - 100,
+        latency: ((averages.ping?.value) / defaults.latency) * 100 - 100,
+    }
+    return health;
 }
 
 const runSingleSpeedTest = async () => {
@@ -115,8 +124,10 @@ const runSingleSpeedTest = async () => {
     db.push("/testing", true);
     try {
         const result = await speedTest({ acceptLicense: true, acceptGdpr: true });
+        const health = await getHealth();
         console.log("Test complete");
-        db.push("/testing", false)
+        db.push("/testing", false);
+        io.emit('health', health);
         io.emit('testing', false);
         await db.push("/tests", [result], false);
         checkForAnomaly(result);
@@ -133,6 +144,8 @@ const runSingleSpeedTest = async () => {
         io.emit('error', true);
     }
 }
+
+
 
 const runSpeedTest = async () => {
     console.log("Running speedtest...");
@@ -141,8 +154,10 @@ const runSpeedTest = async () => {
     db.push("/testing", true);
     try {
         const result = await speedTest({ acceptLicense: true, acceptGdpr: true });
+        const health = await getHealth()
         console.log("Test complete");
-        db.push("/testing", false)
+        db.push("/testing", false);
+        io.emit('health', health);
         io.emit('testing', false);
         await db.push("/tests", [result], false);
         checkForAnomaly(result);
@@ -160,6 +175,9 @@ const runSpeedTest = async () => {
         }, 900000);
     } catch (error) {
         console.log(error);
+        // await db.push("/anomaly", [{
+        //     type: 'offline',
+        // }], false);
         io.emit('error', true);
         setTimeout(() => {
             runSpeedTest();
@@ -167,24 +185,10 @@ const runSpeedTest = async () => {
     }
 }
 
-const port = 5500;
 
-httpServer.listen(port, () => {
-    console.log('Network Monitor running');
-    console.log(`Navigate to: ${process.env.REACT_APP_SERVER_IP}:${port}`);
-    if (!db.getData('/')?.anomaly) {
-        db.push('/anomaly', [], false);
-    }
-    if (!db.getData('/')?.tests) {
-        db.push('/tests', [], false);
-    }
-    if (db.getData('/')?.testing === undefined) {
-        db.push('/testing', true, false);
-    }
-    runSpeedTest();
-});
 
 app.use(express.static(__dirname + '/build'));
+app.use(express.json());
 
 app.get('/api/tests', function (req, res) {
     let todayMidnight = new Date();
@@ -211,6 +215,19 @@ app.get('/api/tests/run', function (req, res) {
     return res.sendStatus(200);
 });
 
+app.get('/api/tests/health', async (req, res) => {
+    const health = await getHealth()
+    return res.send(health)
+});
+
+
+app.post('/api/tests/initialize', async (req, res) => {
+    console.log(req.body)
+    await db.push("/defaults", { ...req.body });
+    runSpeedTest();
+    return res.sendStatus(200);
+});
+
 app.get('/api/tests/all', function (req, res) {
     const tests = db.getData('/')?.tests;
     const averages = getAverages(tests);
@@ -224,4 +241,28 @@ app.get('/api/testing/new', async (req, res) => {
 
 app.get('/*', function (request, response) {
     response.sendFile(path.resolve(__dirname, 'build/index.html'));
+});
+
+const port = 5500;
+
+httpServer.listen(port, () => {
+    console.log('Network Monitor running');
+    console.log(`Navigate to: ${process.env.REACT_APP_SERVER_IP}:${port}`);
+    if (!db.getData('/')?.anomaly) {
+        db.push('/anomaly', [], false);
+    }
+    if (!db.getData('/')?.tests) {
+        db.push('/tests', [], false);
+    }
+    if (db.getData('/')?.testing === undefined) {
+        db.push('/testing', false, false);
+    }
+    if (db.getData('/')?.defaults === undefined) {
+        db.push('/defaults', {
+            download: null,
+            upload: null,
+            jitter: null,
+            latency: null,
+        }, false);
+    }
 });
