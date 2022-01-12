@@ -21,6 +21,20 @@ const App = () => {
   const [isTesting, setTesting] = React.useState(false);
   const [isError, setError] = React.useState(false);
 
+  const [health, setHealth] = React.useState()
+  React.useEffect(() => {
+      const getHealth = async () => {
+          await axios.get('/api/tests/health').then(res => {
+              setHealth(res.data)
+          });
+      }
+      getHealth();
+  }, [])
+
+  React.useEffect(() => {
+      socket.on("health", (newHealth) => { setHealth(newHealth) })
+  }, [])
+
   React.useEffect(() => {
     socket.on("update", (db) => {
       setTests(db);
@@ -77,16 +91,16 @@ const App = () => {
   const memorizedApp = React.useMemo(() => {
     return (
       <Box>
-        <Navigation isError={isError} isTesting={isTesting} socket={socket} />
+        <Navigation isError={isError} isTesting={isTesting} health={health} />
         <Online>
-          {!(isLoading || isLoadingAnomalies) && <SpeedTests data={tests} anomalies={anomalies} isTesting={isTesting} />}
+          {!(isLoading || isLoadingAnomalies) && <SpeedTests data={tests} anomalies={anomalies} isTesting={isTesting} health={health} />}
         </Online>
         <Offline>
           <OfflineAlert setError={setError} />
         </Offline>
       </Box>
     )
-  }, [anomalies, isError, isLoading, isLoadingAnomalies, isTesting, tests])
+  }, [anomalies, isError, isLoading, isLoadingAnomalies, isTesting, tests, health])
   return memorizedApp
 
 }

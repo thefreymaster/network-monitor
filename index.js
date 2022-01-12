@@ -134,7 +134,7 @@ const runSingleSpeedTest = async () => {
         console.log(result);
         let todayMidnight = new Date();
         todayMidnight.setHours(0, 0, 0, 0);
-        const tests = db.getData('/')?.tests.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
+        const tests = db.getData('/')?.tests.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime()).reverse();
         const averages = getAverages(tests)
         io.emit('update', { tests, averages });
         await db.push("/averages", averages, true);

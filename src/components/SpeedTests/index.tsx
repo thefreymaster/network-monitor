@@ -5,6 +5,7 @@ import { LineGraph } from '../LineGraph';
 import { isMobile } from 'react-device-detect';
 import { Welcome } from '../Welcome';
 import { GREEN, GREY, ORANGE, RED } from '../../constants';
+import { Health } from '../Health';
 
 const StatValue = (props: { children: any, type: string }) => {
     const type = new Map();
@@ -42,6 +43,12 @@ export const SpeedTests = (props: {
     }
     anomalies: Array<any>;
     isTesting: boolean;
+    health: {
+        download: number;
+        upload: number;
+        jitter: number;
+        latency: number;
+    }
 }) => {
     if (props.data.tests.length === 0 && props.isTesting) {
         return (
@@ -64,10 +71,15 @@ export const SpeedTests = (props: {
     }
     return (
         <Box padding={isMobile ? "5px" : "20px"} style={{ height: 'calc(100vh - 60px)' }} backgroundColor="#f9f9f9" display="flex" flexDir="column" justifyContent="flex-start">
+            {isMobile && (
+                <Box display="flex" flexDir="row" margin="10px 20px">
+                    <Health health={props.health} />
+                </Box>
+            )}
             <Box display="flex" flexDir="row" flexWrap={isMobile ? "wrap" : "inherit"}>
                 {Object.entries(props.data?.averages).map(([key, test]) => {
                     return (
-                        <Box padding="30px" margin={isMobile ? "5px" : "0px 20px 0px 0px"} marginBottom={isMobile ? "10px" : "20px"} display="flex"
+                        <Box key={key} padding="30px" margin={isMobile ? "5px" : "0px 20px 0px 0px"} marginBottom={isMobile ? "10px" : "20px"} display="flex"
                             maxW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 100px) / 4)"}
                             minW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 100px) / 4)"}
                             backgroundColor="white" boxShadow="base" borderRadius="sm">

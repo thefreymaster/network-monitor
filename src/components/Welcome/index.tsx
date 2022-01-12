@@ -80,7 +80,6 @@ const DefaultsForm = () => {
 export const Welcome = () => {
     const [isSubmitting, setSubmitting] = React.useState(false);
     const handleSubmit = async (v: any) => {
-        debugger
         await axios.post('/api/tests/initialize', v)
     }
     return (
