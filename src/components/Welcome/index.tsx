@@ -94,7 +94,7 @@ export const Welcome = () => {
                 onSubmit={(v) => { console.log(v); handleSubmit(v); setSubmitting(true)}}>
                 <Form>
                     <ModalContent>
-                        <ModalHeader>Set Defaults</ModalHeader>
+                        <ModalHeader></ModalHeader>
                         <ModalBody display="flex" alignItems="center" justifyContent="center" flexDir="column">
                             <Box>
                                 <Box display="flex" alignItems="center" flexDir="column">
