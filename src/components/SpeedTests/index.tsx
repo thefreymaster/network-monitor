@@ -65,7 +65,7 @@ export const SpeedTests = (props: {
     if (props.data.tests.length === 0) {
         return (
             <Box maxW="md">
-                <Welcome />
+                <Welcome isOpen />
             </Box>
         )
     }

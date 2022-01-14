@@ -77,21 +77,21 @@ const DefaultsForm = () => {
     )
 }
 
-export const Welcome = () => {
+export const Welcome = (props: { isOpen: boolean }) => {
     const [isSubmitting, setSubmitting] = React.useState(false);
     const handleSubmit = async (v: any) => {
         await axios.post('/api/tests/initialize', v)
     }
     return (
-        <Modal size="lg" isOpen onClose={() => { }}>
+        <Modal size="lg" isOpen={props.isOpen} onClose={() => { }}>
             <ModalOverlay />
             <Formik initialValues={{
                 download: 800,
                 upload: 15,
-                jitter: 1,
-                latency: 11,
+                jitter: 2,
+                latency: 10,
             }}
-                onSubmit={(v) => { console.log(v); handleSubmit(v); setSubmitting(true)}}>
+                onSubmit={(v) => { console.log(v); handleSubmit(v); setSubmitting(true) }}>
                 <Form>
                     <ModalContent>
                         <ModalHeader></ModalHeader>
@@ -102,8 +102,9 @@ export const Welcome = () => {
                                     <Text fontSize={isMobile ? "lg" : "xxx-large"} fontWeight="black">Network Monitor</Text>
                                     <Text>Track your internet.</Text>
                                 </Box>
-                                <Box marginTop="10">
-                                    <Text fontSize="sm">We need some information about your connection</Text>
+                                <Box marginTop="10" marginBottom="5" display="flex" alignItems="center" justifyContent="center" flexDir="column">
+                                    <Text fontSize="sm">We need some information about your connection.</Text>
+                                    <Text fontSize="sm">Please provide the speeds you pay for from your provider.</Text>
                                 </Box>
                                 <DefaultsForm />
                             </Box>

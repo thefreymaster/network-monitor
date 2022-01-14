@@ -74,6 +74,7 @@ const checkForAnomaly = async (test) => {
     todayMidnight.setHours(0, 0, 0, 0);
     const anomalies = db.getData('/')?.anomaly.filter(test => new Date(test.timestamp).getTime() > todayMidnight.getTime());
     const averages = db.getData('/')?.averages;
+    const defaults = db.getData('/')?.defaults;
 
     let anomaly;
     if (test.download.bandwidth / averages?.download?.value < 0.8) {
@@ -88,13 +89,13 @@ const checkForAnomaly = async (test) => {
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
-    if (test.ping.jitter / averages.jitter.value > 1.2) {
+    if (test.ping.jitter > defaults.jitter + 2) {
         anomaly = { ...test, type: 'jitter' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
         io.emit('anomaly', anomalies);
     }
-    if (test.ping.latency / averages.ping.ping > 1.2) {
+    if (test.ping.latency > defaults.latency + 2) {
         anomaly = { ...test, type: 'ping' }
         console.log({ anomaly })
         await db.push("/anomaly", [anomaly], false);
@@ -224,7 +225,7 @@ app.get('/api/tests/health', async (req, res) => {
 app.post('/api/tests/initialize', async (req, res) => {
     console.log(req.body)
     await db.push("/defaults", { ...req.body });
-    runSpeedTest();
+    await runSpeedTest();
     return res.sendStatus(200);
 });
 

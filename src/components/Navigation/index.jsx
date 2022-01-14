@@ -42,9 +42,9 @@ export const Navigation = (props) => {
                 </Fade>
             )}
             <Box flexGrow={1} />
-            <Button isLoading={props.isTesting} loadingText='Running' colorScheme='teal' onClick={() => axios.get('/api/tests/run')}>
+            {props?.health && <Button isLoading={props.isTesting} loadingText='Running' colorScheme='teal' onClick={() => axios.get('/api/tests/run')}>
                 Run Speed Test
-            </Button>
+            </Button>}
         </Box>
     )
 }
