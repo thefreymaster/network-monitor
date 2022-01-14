@@ -266,4 +266,7 @@ httpServer.listen(port, () => {
             latency: null,
         }, false);
     }
+    if(db.getData('/')?.defaults?.download !== null){
+        runSpeedTest();
+    }
 });
