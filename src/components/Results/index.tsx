@@ -1,4 +1,5 @@
 import React from 'react';
+import { GREEN, GREY, ORANGE, RED } from '../../constants';
 import {
     Modal,
     ModalOverlay,
@@ -9,7 +10,9 @@ import {
     Box,
     ModalCloseButton,
     ModalFooter,
+    Badge,
 } from '@chakra-ui/react'
+import { Dot } from '../Dot';
 
 export const Results = (props: { isOpen: boolean, results: any, setShowResults(values?: any): void }) => {
     const { download, upload, ping } = props.results;
@@ -23,28 +26,48 @@ export const Results = (props: { isOpen: boolean, results: any, setShowResults(v
                     <Box display="flex" flexDir="row" alignItems="center">
                         <Box flexGrow={1} />
                         <Box display="flex" flexDir="column" alignItems="center">
-                            <Text fontSize="large">Download</Text>
-                            <Box display="flex" flexDir="row" alignItems="center">
-                                {/* <Box marginRight="2">{getIcon('download', 48)}</Box> */}
+                            <Box display="flex" flexDir="column" alignItems="center" margin="10">
+                                <Box display="flex" flexDir="row" alignItems="center">
+                                    <Box margin="2">
+                                        <Dot color={GREY} />
+                                    </Box>
+                                    <Text fontSize="large">Download</Text>
+                                </Box>
                                 <Text fontWeight="bold" fontSize="xxx-large">{(download.bandwidth / 125000).toFixed(0)}</Text>
-                                <Text marginLeft="2" fontSize="large">Mbps</Text>
+                                <Badge>Mbps</Badge>
                             </Box>
-                            <Box display="flex" flexDir="column" alignItems="center">
-                                <Text fontSize="large">Jitter</Text>
-                                <Text fontWeight="bold" fontSize="large">{(ping.jitter).toFixed(0)} ms</Text>
+                            <Box display="flex" flexDir="column" alignItems="center" margin="10">
+                                <Box display="flex" flexDir="row" alignItems="center">
+                                    <Box margin="2">
+                                        <Dot color={GREEN} />
+                                    </Box>
+                                    <Text fontSize="large">Jitter</Text>
+                                </Box>
+                                <Text fontWeight="bold" fontSize="x-large">{(ping.jitter).toFixed(0)}</Text>
+                                <Badge>ms</Badge>
                             </Box>
                         </Box>
                         <Box flexGrow={2} />
                         <Box display="flex" flexDir="column" alignItems="center">
-                            <Text fontSize="large">Upload</Text>
-                            <Box display="flex" flexDir="row" alignItems="center">
-                                {/* <Box marginRight="2">{getIcon('upload', 48)}</Box> */}
+                            <Box display="flex" flexDir="column" alignItems="center" margin="10">
+                                <Box display="flex" flexDir="row" alignItems="center">
+                                    <Box margin="2">
+                                        <Dot color={RED} />
+                                    </Box>
+                                    <Text fontSize="large">Upload</Text>
+                                </Box>
                                 <Text fontWeight="bold" fontSize="xxx-large">{(upload.bandwidth / 125000).toFixed(0)}</Text>
-                                <Text marginLeft="2" fontSize="large">Mbps</Text>
+                                <Badge>Mbps</Badge>
                             </Box>
-                            <Box display="flex" flexDir="column" alignItems="center">
-                                <Text fontSize="large">Latency</Text>
-                                <Text fontWeight="bold" fontSize="large">{(ping.latency).toFixed(0)} ms</Text>
+                            <Box display="flex" flexDir="column" alignItems="center" margin="10">
+                                <Box display="flex" flexDir="row" alignItems="center">
+                                    <Box margin="2">
+                                        <Dot color={ORANGE} />
+                                    </Box>
+                                    <Text fontSize="large">Latency</Text>
+                                </Box>
+                                <Text fontWeight="bold" fontSize="x-large">{(ping.latency).toFixed(0)}</Text>
+                                <Badge>ms</Badge>
                             </Box>
                         </Box>
                         <Box flexGrow={1} />
