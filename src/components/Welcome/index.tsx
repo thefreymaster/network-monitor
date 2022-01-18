@@ -18,7 +18,7 @@ import axios from 'axios';
 import { BsHddNetwork } from "react-icons/bs";
 import { isMobile } from 'react-device-detect';
 
-const DefaultsForm = () => {
+export const DefaultsForm = () => {
     return (
         <>
             <Field
@@ -30,7 +30,7 @@ const DefaultsForm = () => {
                 {({ field, form }: { field: any, form: any }) => (
                     <FormControl colorScheme="red" isRequired isInvalid={form.errors.download && form.touched.download}>
                         <FormLabel htmlFor="download">Download (Mbps)</FormLabel>
-                        <Input {...field} autoFocus variant="filled" id="download" placeholder="Pearl & Lopez" autoCorrect={false} _autofill={false} />
+                        <Input {...field} autoFocus variant="filled" id="download" placeholder="800" autoCorrect={false} _autofill={false} />
                     </FormControl>
                 )}
             </Field>
@@ -43,7 +43,7 @@ const DefaultsForm = () => {
                 {({ field, form }: { field: any, form: any }) => (
                     <FormControl colorScheme="red" isRequired isInvalid={form.errors.upload && form.touched.upload}>
                         <FormLabel htmlFor="upload">Upload (Mbps)</FormLabel>
-                        <Input {...field} variant="filled" id="upload" placeholder="Pearl & Lopez" autoCorrect={false} _autofill={false} />
+                        <Input {...field} variant="filled" id="upload" placeholder="25" autoCorrect={false} _autofill={false} />
                     </FormControl>
                 )}
             </Field>
@@ -56,7 +56,7 @@ const DefaultsForm = () => {
                 {({ field, form }: { field: any, form: any }) => (
                     <FormControl colorScheme="red" isRequired isInvalid={form.errors.jitter && form.touched.jitter}>
                         <FormLabel htmlFor="jitter">Jitter (ms)</FormLabel>
-                        <Input {...field} variant="filled" id="jitter" placeholder="Pearl & Lopez" autoCorrect={false} _autofill={false} />
+                        <Input {...field} variant="filled" id="jitter" placeholder="2" autoCorrect={false} _autofill={false} />
                     </FormControl>
                 )}
             </Field>
@@ -69,7 +69,7 @@ const DefaultsForm = () => {
                 {({ field, form }: { field: any, form: any }) => (
                     <FormControl colorScheme="red" isRequired isInvalid={form.errors.latency && form.touched.latency}>
                         <FormLabel htmlFor="latency">Latency (ms)</FormLabel>
-                        <Input {...field} variant="filled" id="latency" placeholder="Pearl & Lopez" autoCorrect={false} _autofill={false} />
+                        <Input {...field} variant="filled" id="latency" placeholder="10" autoCorrect={false} _autofill={false} />
                     </FormControl>
                 )}
             </Field>

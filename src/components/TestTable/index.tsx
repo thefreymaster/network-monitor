@@ -24,12 +24,12 @@ const getColor = (type: string) => {
     return colors.get(type);
 }
 
-export const getIcon = (type: string) => {
+export const getIcon = (type: string, fontSize?: number) => {
     const colors = new Map();
-    colors.set('download', <AiOutlineDownload size="18px" color={getColor(type)} />);
-    colors.set('upload', <AiOutlineUpload size="18px" color={getColor(type)} />);
-    colors.set('jitter', <IoIosRadio size="18px" color={getColor(type)} />);
-    colors.set('ping', <GiElectric size="18px" color={getColor(type)} />);
+    colors.set('download', <AiOutlineDownload size={fontSize || "18px"} color={getColor(type)} />);
+    colors.set('upload', <AiOutlineUpload size={fontSize || "18px"} color={getColor(type)} />);
+    colors.set('jitter', <IoIosRadio size={fontSize || "18px"} color={getColor(type)} />);
+    colors.set('ping', <GiElectric size={fontSize || "18px"} color={getColor(type)} />);
     return colors.get(type);
 }
 
@@ -54,7 +54,7 @@ export const TestTable = (props: {
             </Thead>
             <Tbody>
                 {reversedAnomalies.map((anomaly) => (
-                    <Tr key={anomaly.timestamp}>
+                    <Tr key={`${anomaly.timestamp}-${anomaly.type}`}>
                         {props.type === 'anomaly' && (
                             <Td textAlign='center'>
                                 <Box display="flex" flexDir="row" alignItems="center" justifyContent="center">

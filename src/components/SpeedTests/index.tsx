@@ -1,11 +1,12 @@
 import { Box, Stat, Text, StatLabel, StatNumber, Alert, Spinner, Fade } from '@chakra-ui/react';
 import React from 'react';
-import { TestTable } from '../TestTable';
+import { getIcon, TestTable } from '../TestTable';
 import { LineGraph } from '../LineGraph';
 import { isMobile } from 'react-device-detect';
 import { Welcome } from '../Welcome';
 import { GREEN, GREY, ORANGE, RED } from '../../constants';
 import { Health } from '../Health';
+import { Defaults } from '../Defaults/index';
 
 const StatValue = (props: { children: any, type: string }) => {
     const type = new Map();
@@ -48,7 +49,9 @@ export const SpeedTests = (props: {
         upload: number;
         jitter: number;
         latency: number;
-    }
+    };
+    showDefaults: boolean;
+    setShowDefaults(value: boolean): void;
 }) => {
     if (props.data.tests.length === 0 && props.isTesting) {
         return (
@@ -77,12 +80,16 @@ export const SpeedTests = (props: {
                 </Box>
             )}
             <Box display="flex" flexDir="row" flexWrap={isMobile ? "wrap" : "inherit"}>
+                <Defaults setShowDefaults={props.setShowDefaults} isOpen={props.showDefaults} />
                 {Object.entries(props.data?.averages).map(([key, test]) => {
                     return (
-                        <Box key={key} padding="30px" margin={isMobile ? "5px" : "0px 20px 0px 0px"} marginBottom={isMobile ? "10px" : "20px"} display="flex"
+                        <Box key={test.label} padding={isMobile ? "10px 20px" : "30px"} margin={isMobile ? "5px" : "0px 20px 0px 0px"} marginBottom={isMobile ? "10px" : "20px"} display="flex"
                             maxW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 100px) / 4)"}
                             minW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 100px) / 4)"}
-                            backgroundColor="white" boxShadow="base" borderRadius="sm">
+                            backgroundColor="white" boxShadow="base" borderRadius="sm" flexDir="row" alignItems="center">
+                            {/* <Box marginRight="4">
+                                {getIcon(test.label.toLowerCase(), 32)}
+                            </Box> */}
                             <Stat>
                                 <StatLabel>{test.label}</StatLabel>
                                 <StatNumber>

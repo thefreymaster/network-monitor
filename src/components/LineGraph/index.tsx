@@ -32,7 +32,7 @@ export const LineGraph = (props: {
     return (
         <Box margin={isMobile ? "5px" : "0px 20px 0px 0px"} maxW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 100px) / 4)"}
             minW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 100px) / 4)"}
-            backgroundColor="#fff" height="250px" display="flex" flexDir="column" alignItems="center" justifyContent="center" boxShadow="base" borderRadius="sm">
+            backgroundColor="#fff" height={isMobile ? "150px" : "250px"} display="flex" flexDir="column" alignItems="center" justifyContent="center" boxShadow="base" borderRadius="sm">
             <Box
                 mt='1'
                 fontWeight='semibold'

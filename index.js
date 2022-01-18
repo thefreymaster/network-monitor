@@ -129,6 +129,7 @@ const runSingleSpeedTest = async () => {
         console.log("Test complete");
         db.push("/testing", false);
         io.emit('health', health);
+        io.emit('results', result);
         io.emit('testing', false);
         await db.push("/tests", [result], false);
         checkForAnomaly(result);
@@ -227,6 +228,18 @@ app.post('/api/tests/initialize', async (req, res) => {
     await db.push("/defaults", { ...req.body });
     await runSpeedTest();
     return res.sendStatus(200);
+});
+
+app.post('/api/tests/defaults', async (req, res) => {
+    console.log(req.body)
+    await db.push("/defaults", { ...req.body });
+    return res.sendStatus(200);
+});
+
+app.get('/api/tests/defaults', async (req, res) => {
+    console.log(req.body)
+    const defaults = await db.getData('/')?.defaults;
+    return res.send(defaults);
 });
 
 app.get('/api/tests/all', function (req, res) {

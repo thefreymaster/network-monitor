@@ -12,6 +12,7 @@ export const Health = (props: {
 }) => {
     return (
         <>
+            <Box flexGrow={1} />
             <Tooltip hasArrow label='Download Health'>
                 <Fade in>
                     <Box display="flex" flexDir="row" alignItems="center" justifyContent="center">
@@ -20,6 +21,7 @@ export const Health = (props: {
                     </Box>
                 </Fade>
             </Tooltip>
+            <Box flexGrow={1} />
             <Box flexGrow={1} />
             <Tooltip hasArrow label='Upload Health'>
                 <Fade in>
@@ -30,7 +32,7 @@ export const Health = (props: {
                 </Fade>
             </Tooltip>
             <Box flexGrow={1} />
-            <Tooltip hasArrow label='Jitter Health'>
+            {/* <Tooltip hasArrow label='Jitter Health'>
                 <Fade in>
                     <Box display="flex" flexDir="row" alignItems="center" justifyContent="center">
                         <Dot style={{ marginRight: 5 }} color={ORANGE} />
@@ -46,7 +48,7 @@ export const Health = (props: {
                         <Text fontWeight="medium" fontSize="small">{props.health?.latency?.toFixed(0)}%</Text>
                     </Box>
                 </Fade>
-            </Tooltip>
+            </Tooltip> */}
         </>
     )
 }

@@ -1,13 +1,13 @@
-import { Box, Tag, Text, Button, TagLeftIcon, TagLabel, Fade } from '@chakra-ui/react';
+import { Box, Tag, Text, Button, TagLeftIcon, TagLabel, Fade, IconButton } from '@chakra-ui/react';
 import { BsHddNetwork } from "react-icons/bs";
 import { FiAlertTriangle } from "react-icons/fi";
+import { AiOutlineInfoCircle, AiOutlinePlayCircle } from "react-icons/ai";
 import axios from 'axios';
-import { isDesktop } from 'react-device-detect';
+import { isDesktop, isMobile } from 'react-device-detect';
 import { Health } from '../Health';
 
 
 export const Navigation = (props) => {
-
     return (
         <Box zIndex={100}
             boxShadow="sm"
@@ -25,9 +25,9 @@ export const Navigation = (props) => {
             }}
         >
             <BsHddNetwork />
-            <Box marginLeft="10px">
+            {isDesktop && <Box marginLeft="10px">
                 <Text fontWeight="bold">Network Monitor</Text>
-            </Box>
+            </Box>}
             {isDesktop && <Box flexGrow={1} />}
             {isDesktop && props.health?.download && (
                 <Health health={props.health} />
@@ -42,9 +42,13 @@ export const Navigation = (props) => {
                 </Fade>
             )}
             <Box flexGrow={1} />
-            {props?.health && <Button isLoading={props.isTesting} loadingText='Running' colorScheme='teal' onClick={() => axios.get('/api/tests/run')}>
+            <IconButton onClick={() => props.setShowDefaults(true)} variant="ghost" marginRight="3" aria-label='Search database' icon={<AiOutlineInfoCircle />} />
+            {props?.health && isDesktop && <Button isLoading={props.isTesting} loadingText='Running' colorScheme='teal' onClick={() => axios.get('/api/tests/run')}>
                 Run Speed Test
             </Button>}
+            {props?.health && isMobile && <IconButton icon={<AiOutlinePlayCircle />} isLoading={props.isTesting} colorScheme='teal' onClick={() => axios.get('/api/tests/run')}>
+                Run Speed Test
+            </IconButton>}
         </Box>
     )
 }

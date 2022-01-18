@@ -10,6 +10,7 @@ import { SpeedTests } from './components/SpeedTests';
 import { useQuery } from 'react-query';
 import { Offline, Online } from "react-detect-offline";
 import { OfflineAlert } from './components/OfflineAlert/index';
+import { Results } from './components/Results/index';
 
 const socket = io(`http://${process.env.REACT_APP_SERVER_IP}:5500`);
 
@@ -17,11 +18,14 @@ const App = () => {
   const toast = useToast();
   const [tests, setTests] = React.useState();
   const [anomalies, setAnomalies] = React.useState();
-
+  const [results, setResults] = React.useState();
   const [isTesting, setTesting] = React.useState(false);
   const [isError, setError] = React.useState(false);
 
   const [health, setHealth] = React.useState()
+  const [showDefaults, setShowDefaults] = React.useState(false);
+  const [showResults, setShowResults] = React.useState(false);
+
   React.useEffect(() => {
       const getHealth = async () => {
           await axios.get('/api/tests/health').then(res => {
@@ -60,6 +64,13 @@ const App = () => {
   }, []);
 
   React.useLayoutEffect(() => {
+    socket.on("results", (results) => {
+      setResults(results);
+      setShowResults(true);
+    })
+  }, []);
+
+  React.useLayoutEffect(() => {
     socket.on("error", (e) => {
       if (e) {
         setError(true);
@@ -91,16 +102,17 @@ const App = () => {
   const memorizedApp = React.useMemo(() => {
     return (
       <Box>
-        <Navigation isError={isError} isTesting={isTesting} health={health} />
+        <Navigation setShowDefaults={setShowDefaults} showDefaults={showDefaults} isError={isError} isTesting={isTesting} health={health} />
+        {results && <Results setShowResults={setShowResults} setResults={setResults} results={results} isOpen={showResults} />}
         <Online>
-          {!(isLoading || isLoadingAnomalies) && <SpeedTests data={tests} anomalies={anomalies} isTesting={isTesting} health={health} />}
+          {!(isLoading || isLoadingAnomalies) && <SpeedTests setShowDefaults={setShowDefaults} showDefaults={showDefaults} data={tests} anomalies={anomalies} isTesting={isTesting} health={health} />}
         </Online>
         <Offline>
           <OfflineAlert setError={setError} />
         </Offline>
       </Box>
     )
-  }, [anomalies, isError, isLoading, isLoadingAnomalies, isTesting, tests, health])
+  }, [showDefaults, isError, isTesting, health, results, showResults, isLoading, isLoadingAnomalies, tests, anomalies])
   return memorizedApp
 
 }
