@@ -19,8 +19,7 @@ const App = () => {
   const [anomalies, setAnomalies] = React.useState();
   const [results, setResults] = React.useState();
   const [isTesting, setTesting] = React.useState(false);
-  const [isError, setError] = React.useState(true);
-
+  const [isError, setError] = React.useState(false);
   const [health, setHealth] = React.useState();
   const [showDefaults, setShowDefaults] = React.useState(false);
   const [showResults, setShowResults] = React.useState(false);
