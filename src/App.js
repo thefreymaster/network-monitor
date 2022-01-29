@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import { Offline, Online } from "react-detect-offline";
 import { OfflineAlert } from "./components/OfflineAlert/index";
 import { Results } from "./components/Results/index";
+import { ErrorAlert } from './components/ErrorAlert/index';
 
 const socket = io(`http://${process.env.REACT_APP_SERVER_IP}:5500`);
 
@@ -18,7 +19,7 @@ const App = () => {
   const [anomalies, setAnomalies] = React.useState();
   const [results, setResults] = React.useState();
   const [isTesting, setTesting] = React.useState(false);
-  const [isError, setError] = React.useState(false);
+  const [isError, setError] = React.useState(true);
 
   const [health, setHealth] = React.useState();
   const [showDefaults, setShowDefaults] = React.useState(false);
@@ -122,6 +123,7 @@ const App = () => {
             isOpen={showResults}
           />
         )}
+        <ErrorAlert isError={isError} />
         <Online>
           {!(isLoading || isLoadingAnomalies) && (
             <SpeedTests

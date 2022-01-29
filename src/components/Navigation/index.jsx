@@ -1,15 +1,5 @@
-import {
-  Box,
-  Tag,
-  Text,
-  Button,
-  TagLeftIcon,
-  TagLabel,
-  Fade,
-  IconButton,
-} from "@chakra-ui/react";
+import { Box, Text, Button, IconButton } from "@chakra-ui/react";
 import { BsHddNetwork } from "react-icons/bs";
-import { FiAlertTriangle } from "react-icons/fi";
 import {
   AiOutlineInfoCircle,
   AiOutlinePlayCircle,
@@ -31,7 +21,7 @@ export const Navigation = (props) => {
       padding="0px 20px 0px 20px"
       justifyContent="center"
       alignItems="center"
-      transition={{ backgroundColor: "1000ms ease-in-out"}}
+      transition={{ backgroundColor: "1000ms ease-in-out" }}
       style={{
         willChange: "transform",
         width: "100vw",
@@ -51,15 +41,6 @@ export const Navigation = (props) => {
       )}
       {isDesktop && <Box flexGrow={1} />}
       {isDesktop && props.health?.download && <Health health={props.health} />}
-      {isDesktop && props.isError && (
-        <Fade in={props.isError}>
-          <Tag mr="4" size="lg" colorScheme="red">
-            <TagLeftIcon boxSize="12px" as={FiAlertTriangle} />
-            <TagLabel>Problems Detected</TagLabel>
-          </Tag>
-          <Box flexGrow={1} />
-        </Fade>
-      )}
       <Box flexGrow={1} />
       <IconButton
         onClick={() => props.setShowDefaults(true)}
