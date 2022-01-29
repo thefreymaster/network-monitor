@@ -7,6 +7,7 @@ import { Welcome } from '../Welcome';
 import { GREEN, GREY, ORANGE, RED } from '../../constants';
 import { Health } from '../Health';
 import { Defaults } from '../Defaults/index';
+import { useIsDay } from '../../providers/IsDayProvider';
 
 const StatValue = (props: { children: any, type: string }) => {
     const type = new Map();
@@ -53,6 +54,8 @@ export const SpeedTests = (props: {
     showDefaults: boolean;
     setShowDefaults(value: boolean): void;
 }) => {
+    const { isDay } = useIsDay();
+
     if (props.data.tests.length === 0 && props.isTesting) {
         return (
             <Fade in>
@@ -73,7 +76,7 @@ export const SpeedTests = (props: {
         )
     }
     return (
-        <Box padding={isMobile ? "5px" : "20px"} style={{ height: 'calc(100vh - 60px)' }} backgroundColor="#f9f9f9" display="flex" flexDir="column" justifyContent="flex-start">
+        <Box padding={isMobile ? "5px" : "20px"} style={{ minHeight: 'calc(100vh - 60px)' }} backgroundColor={isDay ? '#fff' : 'gray.900'} display="flex" flexDir="column" justifyContent="flex-start">
             {isMobile && (
                 <Box display="flex" flexDir="row" margin="10px 20px">
                     <Health health={props.health} />
@@ -83,10 +86,12 @@ export const SpeedTests = (props: {
                 <Defaults setShowDefaults={props.setShowDefaults} isOpen={props.showDefaults} />
                 {Object.entries(props.data?.averages).map(([key, test]) => {
                     return (
-                        <Box key={test.label} padding={isMobile ? "10px 20px" : "30px"} margin={isMobile ? "5px" : "0px 20px 0px 0px"} marginBottom={isMobile ? "10px" : "20px"} display="flex"
+                        <Box key={test.label} padding="30px" margin={isMobile ? "5px" : "0px 20px 0px 0px"} marginBottom={isMobile ? "10px" : "20px"} display="flex"
                             maxW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 100px) / 4)"}
                             minW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 100px) / 4)"}
-                            backgroundColor="white" boxShadow="base" borderRadius="sm" flexDir="row" alignItems="center">
+                            backgroundColor={isDay ? '#fff' : '#1A202C'}
+                            color={isDay ? 'gray.800' : 'gray.100'}
+                            boxShadow="base" borderRadius="sm" flexDir="row" alignItems="center">
                             {/* <Box marginRight="4">
                                 {getIcon(test.label.toLowerCase(), 32)}
                             </Box> */}
@@ -137,12 +142,12 @@ export const SpeedTests = (props: {
                 />
             </Box>
             <Box display="flex" flexDir={isMobile ? "column" : "row"}>
-                <Box textAlign='center' maxHeight="calc(100vh - 508px)" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginRight="20px" marginBottom="20px" display="flex" maxW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} minW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} backgroundColor="white" boxShadow="base" borderRadius="sm">
-                    <Text fontWeight="bold">Anomalies</Text>
+                <Box textAlign='center' maxHeight="calc(100vh - 508px)" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginRight="20px" marginBottom="20px" display="flex" maxW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} minW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} backgroundColor={isDay ? '#fff' : '#1A202C'} color={isDay ? 'gray.800' : 'gray.100'} boxShadow="base" borderRadius="sm">
+                    <Text fontWeight="bold" backgroundColor={isDay ? '#fff' : '#1A202C'} color={isDay ? 'gray.800' : 'gray.100'}>Anomalies</Text>
                     <TestTable caption="Today's anomalies" type="anomaly" data={props.anomalies} />
                 </Box>
-                <Box textAlign='center' maxHeight="calc(100vh - 508px)" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginBottom="20px" display="flex" maxW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} minW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} backgroundColor="white" boxShadow="base" borderRadius="sm">
-                    <Text fontWeight="bold">Tests</Text>
+                <Box textAlign='center' maxHeight="calc(100vh - 508px)" flexDir="column" overflow="auto" padding={isMobile ? "0px" : "20px 0px"} marginTop="20px" marginBottom="20px" display="flex" maxW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} minW={isMobile ? "calc(100vw - 20px)" : "calc(50vw - 30px)"} backgroundColor={isDay ? '#fff' : '#1A202C'} color={isDay ? 'gray.800' : 'gray.100'} boxShadow="base" borderRadius="sm">
+                    <Text fontWeight="bold" backgroundColor={isDay ? '#fff' : '#1A202C'} color={isDay ? 'gray.800' : 'gray.100'}>Tests</Text>
                     <TestTable caption="Today's tests" type="tests" data={props.data.tests} />
                 </Box>
             </Box>

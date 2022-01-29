@@ -3,7 +3,6 @@ import {
     Table,
     Thead,
     Tbody,
-    Tooltip,
     Tr,
     Th,
     Td,
@@ -14,6 +13,8 @@ import { Dot } from '../Dot';
 import { AiOutlineDownload, AiOutlineUpload } from 'react-icons/ai';
 import { IoIosRadio } from 'react-icons/io';
 import { GiElectric } from 'react-icons/gi';
+import { IoCloudOfflineOutline } from 'react-icons/io5';
+import { useIsDay } from '../../providers/IsDayProvider';
 
 const getColor = (type: string) => {
     const colors = new Map();
@@ -21,6 +22,7 @@ const getColor = (type: string) => {
     colors.set('upload', '#2A9D8F');
     colors.set('jitter', '#F4A261');
     colors.set('ping', '#E76F51');
+    colors.set('offline', '#757575');
     return colors.get(type);
 }
 
@@ -30,6 +32,7 @@ export const getIcon = (type: string, fontSize?: number) => {
     colors.set('upload', <AiOutlineUpload size={fontSize || "18px"} color={getColor(type)} />);
     colors.set('jitter', <IoIosRadio size={fontSize || "18px"} color={getColor(type)} />);
     colors.set('ping', <GiElectric size={fontSize || "18px"} color={getColor(type)} />);
+    colors.set('offline', <IoCloudOfflineOutline size={fontSize || "18px"} color={getColor(type)} />);
     return colors.get(type);
 }
 
@@ -39,17 +42,19 @@ export const TestTable = (props: {
     caption: string;
 }) => {
     const reversedAnomalies = [...props.data].reverse();
+    const { isDay } = useIsDay();
+
     return (
-        <Table variant='simple' size='sm'>
-            <TableCaption>{props.caption}</TableCaption>
+        <Table variant='simple' size='sm' backgroundColor={isDay ? '#fff' : '#1A202C'} color={isDay ? 'gray.800' : 'gray.100'}>
+            <TableCaption backgroundColor={isDay ? '#fff' : '#1A202C'} color={isDay ? 'gray.800' : 'gray.100'}>{props.caption}</TableCaption>
             <Thead>
                 <Tr>
-                    {props.type === 'anomaly' && <Th>Type</Th>}
-                    <Th isNumeric>Download</Th>
-                    <Th isNumeric>Upload</Th>
-                    <Th isNumeric>Jitter</Th>
-                    <Th isNumeric>Ping</Th>
-                    <Th>Date of Event</Th>
+                    {props.type === 'anomaly' && <Th color={isDay ? 'gray.800' : 'gray.100'}>Type</Th>}
+                    <Th isNumeric color={isDay ? 'gray.800' : 'gray.100'}>Download</Th>
+                    <Th isNumeric color={isDay ? 'gray.800' : 'gray.100'}>Upload</Th>
+                    <Th isNumeric color={isDay ? 'gray.800' : 'gray.100'}>Jitter</Th>
+                    <Th isNumeric color={isDay ? 'gray.800' : 'gray.100'}>Ping</Th>
+                    <Th color={isDay ? 'gray.800' : 'gray.100'}>Date of Event</Th>
                 </Tr>
             </Thead>
             <Tbody>

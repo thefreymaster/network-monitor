@@ -4,6 +4,7 @@ import { Box, Text } from '@chakra-ui/react';
 import { isMobile } from 'react-device-detect';
 import { Dot } from '../Dot';
 import { Icon } from '../Icon';
+import { useIsDay } from '../../providers/IsDayProvider';
 
 const getUnit = (type: string) => {
     const colors = new Map();
@@ -28,11 +29,12 @@ export const LineGraph = (props: {
     title: string
     color: string,
 }) => {
+    const { isDay } = useIsDay();
 
     return (
         <Box margin={isMobile ? "5px" : "0px 20px 0px 0px"} maxW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 100px) / 4)"}
             minW={isMobile ? "calc((100vw - 40px) / 2)" : "calc((100vw - 100px) / 4)"}
-            backgroundColor="#fff" height={isMobile ? "150px" : "250px"} display="flex" flexDir="column" alignItems="center" justifyContent="center" boxShadow="base" borderRadius="sm">
+            backgroundColor={isDay ? '#fff' : 'gray.800'} height={isMobile ? "150px" : "250px"} display="flex" flexDir="column" alignItems="center" justifyContent="center" boxShadow="base" borderRadius="sm">
             <Box
                 mt='1'
                 fontWeight='semibold'
@@ -45,15 +47,15 @@ export const LineGraph = (props: {
                     <Dot color={props.color} />
                     {/* <Icon type={props.title.toLowerCase()} /> */}
                 </Box>
-                <Box marginLeft="1">{props.title}</Box>
+                <Box marginLeft="1" color={isDay ? 'gray.800' : 'gray.100'}>{props.title}</Box>
             </Box>
             <ResponsiveLine
                 data={props.data}
                 enableArea
                 enablePointLabel
                 tooltip={Tooltip}
-                margin={{ top: 10, right: 0, bottom: 0, left: 30 }}
-                curve="linear"
+                margin={{ top: 30, right: 0, bottom: 0, left: 30 }}
+                curve="natural"
                 enablePoints={false}
                 useMesh
                 enableGridX={false}

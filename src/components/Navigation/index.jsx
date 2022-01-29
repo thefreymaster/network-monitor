@@ -1,13 +1,14 @@
 import { Box, Tag, Text, Button, TagLeftIcon, TagLabel, Fade, IconButton } from '@chakra-ui/react';
-import { BsHddNetwork } from "react-icons/bs";
+import { BsHddNetwork, BsLightbulb } from "react-icons/bs";
 import { FiAlertTriangle } from "react-icons/fi";
 import { AiOutlineInfoCircle, AiOutlinePlayCircle } from "react-icons/ai";
 import axios from 'axios';
 import { isDesktop, isMobile } from 'react-device-detect';
 import { Health } from '../Health';
-
+import { useIsDay } from '../../providers/IsDayProvider';
 
 export const Navigation = (props) => {
+    const { isDay, setIsDay } = useIsDay();
     return (
         <Box zIndex={100}
             boxShadow="sm"
@@ -20,13 +21,13 @@ export const Navigation = (props) => {
                 width: '100vw',
                 height: 60,
                 left: 0,
-                backgroundColor: '#fff',
+                backgroundColor: isDay ? '#fff' : '#1A202C',
                 backdropFilter: 'blur(8px)',
             }}
         >
-            <BsHddNetwork />
+            <BsHddNetwork color={isDay ? 'gray.800' : 'white'} />
             {isDesktop && <Box marginLeft="10px">
-                <Text fontWeight="bold">Network Monitor</Text>
+                <Text fontWeight="bold" color={isDay ? 'gray.800' : 'gray.100'}>Network Monitor</Text>
             </Box>}
             {isDesktop && <Box flexGrow={1} />}
             {isDesktop && props.health?.download && (
@@ -42,13 +43,18 @@ export const Navigation = (props) => {
                 </Fade>
             )}
             <Box flexGrow={1} />
-            <IconButton onClick={() => props.setShowDefaults(true)} variant="ghost" marginRight="3" aria-label='Search database' icon={<AiOutlineInfoCircle />} />
-            {props?.health && isDesktop && <Button isLoading={props.isTesting} loadingText='Running' colorScheme='teal' onClick={() => axios.get('/api/tests/run')}>
-                Run Speed Test
-            </Button>}
-            {props?.health && isMobile && <IconButton icon={<AiOutlinePlayCircle />} isLoading={props.isTesting} colorScheme='teal' onClick={() => axios.get('/api/tests/run')}>
-                Run Speed Test
-            </IconButton>}
+            <IconButton onClick={() => props.setShowDefaults(true)} variant="ghost" marginRight="3" color="white" backgroundColor={isDay ? "gray.500" : "gray.600"} aria-label='Search database' _hover={{ backgroundColor: "gray.700" }} icon={<AiOutlineInfoCircle />} />
+            <IconButton onClick={() => isDay ? setIsDay(false) : setIsDay(true)} variant="ghost" marginRight="3" color="white" backgroundColor={isDay ? "gray.500" : "gray.600"} aria-label='Search database' _hover={{ backgroundColor: "gray.700" }} icon={<BsLightbulb />} />
+            {props?.health && isDesktop &&
+                <Button isLoading={props.isTesting} loadingText='Running' color="white" colorScheme='gray' backgroundColor="gray.600" _hover={{ backgroundColor: "gray.700" }} onClick={() => axios.get('/api/tests/run')}>
+                    Run Speed Test
+                </Button>
+            }
+            {props?.health && isMobile &&
+                <IconButton icon={<AiOutlinePlayCircle />} isLoading={props.isTesting} color="white" colorScheme='gray' backgroundColor="gray.600" _hover={{ backgroundColor: "gray.700" }} onClick={() => axios.get('/api/tests/run')}>
+                    Run Speed Test
+                </IconButton>
+            }
         </Box>
     )
 }

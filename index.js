@@ -177,9 +177,20 @@ const runSpeedTest = async () => {
         }, 900000);
     } catch (error) {
         console.log(error);
-        // await db.push("/anomaly", [{
-        //     type: 'offline',
-        // }], false);
+        await db.push("/anomaly", [{
+            "type": 'offline',
+            "timestamp": new Date().toISOString(),
+            "ping": {
+                "jitter": 0,
+                "latency": 0
+            },
+            "download": {
+                "bandwidth": 0
+            },
+            "upload": {
+                "bandwidth": 0
+            }
+        }], false);
         io.emit('error', true);
         setTimeout(() => {
             runSpeedTest();
@@ -279,7 +290,7 @@ httpServer.listen(port, () => {
             latency: null,
         }, false);
     }
-    if(db.getData('/')?.defaults?.download !== null){
+    if (db.getData('/')?.defaults?.download !== null) {
         runSpeedTest();
     }
 });

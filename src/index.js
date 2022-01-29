@@ -6,17 +6,20 @@ import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from 'react-query'
 import registerServiceWorker from './serviceWorker';
+import { IsDayProvider } from './providers/IsDayProvider';
 
 const queryClient = new QueryClient()
 
 ReactDOM.render(
 
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ChakraProvider>
-        <App />
-      </ChakraProvider>
-    </QueryClientProvider>
+    <IsDayProvider>
+      <QueryClientProvider client={queryClient}>
+        <ChakraProvider>
+          <App />
+        </ChakraProvider>
+      </QueryClientProvider>
+    </IsDayProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

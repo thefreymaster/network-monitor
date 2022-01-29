@@ -1,5 +1,6 @@
 import { Box, Text, Fade, Tooltip } from '@chakra-ui/react';
 import { GREEN, GREY, ORANGE, RED } from '../../constants';
+import { useIsDay } from '../../providers/IsDayProvider';
 import { Dot } from '../Dot';
 
 export const Health = (props: {
@@ -10,6 +11,7 @@ export const Health = (props: {
         latency: number;
     }
 }) => {
+    const { isDay } = useIsDay();
     return (
         <>
             <Box flexGrow={1} />
@@ -17,7 +19,7 @@ export const Health = (props: {
                 <Fade in>
                     <Box display="flex" flexDir="row" alignItems="center" justifyContent="center">
                         <Dot style={{ marginRight: 5 }} color={GREY} />
-                        <Text fontWeight="medium" fontSize="small">{props.health?.download?.toFixed(0)}%</Text>
+                        <Text fontWeight="medium" fontSize="small" color={isDay ? 'gray.800' : 'gray.100'}>{props.health?.download?.toFixed(0)}%</Text>
                     </Box>
                 </Fade>
             </Tooltip>
@@ -27,7 +29,7 @@ export const Health = (props: {
                 <Fade in>
                     <Box display="flex" flexDir="row" alignItems="center" justifyContent="center">
                         <Dot style={{ marginRight: 5 }} color={GREEN} />
-                        <Text fontWeight="medium" fontSize="small">{props.health?.upload?.toFixed(0)}%</Text>
+                        <Text fontWeight="medium" fontSize="small" color={isDay ? 'gray.800' : 'gray.100'}>{props.health?.upload?.toFixed(0)}%</Text>
                     </Box>
                 </Fade>
             </Tooltip>

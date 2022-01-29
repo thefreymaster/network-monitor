@@ -11,11 +11,13 @@ import {
     ModalCloseButton,
     ModalFooter,
     Badge,
+    Tag,
 } from '@chakra-ui/react'
 import { Dot } from '../Dot';
 
 export const Results = (props: { isOpen: boolean, results: any, setShowResults(values?: any): void }) => {
     const { download, upload, ping } = props.results;
+    console.log(props.results);
     return (
         <Modal size="lg" isOpen={props.isOpen} onClose={() => props.setShowResults(false)} isCentered>
             <ModalOverlay />
@@ -23,7 +25,7 @@ export const Results = (props: { isOpen: boolean, results: any, setShowResults(v
                 <ModalHeader>Test Results</ModalHeader>
                 <ModalCloseButton onClose={() => props.setShowResults(false)} />
                 <ModalBody>
-                    <Box display="flex" flexDir="row" alignItems="center">
+                    <Box display="flex" flexDir="row" alignItems="center" height="400px">
                         <Box flexGrow={1} />
                         <Box display="flex" flexDir="column" alignItems="center">
                             <Box display="flex" flexDir="column" alignItems="center" margin="10">
@@ -72,12 +74,20 @@ export const Results = (props: { isOpen: boolean, results: any, setShowResults(v
                         </Box>
                         <Box flexGrow={1} />
                     </Box>
-                    <Box display="flex" flexDir="row" marginTop="6">
+                    <Box display="flex" flexDir="column" marginTop="6" alignItems='center'>
                         <Box flexGrow={1} />
-                        <Text fontSize="large">{props.results.isp}</Text>
+                        <Text fontWeight="medium" fontSize="large">{props.results.isp}</Text>
                         <Box flexGrow={1} />
+                        <Box display="flex" flexDir="row" marginTop="1" alignItems='center'>
+                            <Tag>
+                                <Text fontWeight="medium" fontSize="sm">{props.results?.server?.location}</Text>
+                            </Tag>
+                            <Box flexGrow={1} mr="2" />
+                            <Tag>
+                                <Text fontWeight="medium" fontSize="sm">{props.results?.server?.ip}</Text>
+                            </Tag>
+                        </Box>
                     </Box>
-
                 </ModalBody>
                 <ModalFooter />
             </ModalContent>
