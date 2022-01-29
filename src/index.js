@@ -4,7 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from '@chakra-ui/react';
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from 'react-query';
+import theme from './theme';
 import registerServiceWorker from './serviceWorker';
 import { IsDayProvider } from './providers/IsDayProvider';
 
@@ -13,7 +14,7 @@ const queryClient = new QueryClient()
 ReactDOM.render(
 
   <React.StrictMode>
-    <IsDayProvider>
+    <IsDayProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <ChakraProvider>
           <App />

@@ -8,9 +8,14 @@ import {
   Fade,
   IconButton,
 } from "@chakra-ui/react";
-import { BsHddNetwork, BsLightbulb } from "react-icons/bs";
+import { BsHddNetwork } from "react-icons/bs";
 import { FiAlertTriangle } from "react-icons/fi";
-import { AiOutlineInfoCircle, AiOutlinePlayCircle } from "react-icons/ai";
+import {
+  AiOutlineInfoCircle,
+  AiOutlinePlayCircle,
+  AiOutlineBulb,
+  AiFillBulb,
+} from "react-icons/ai";
 import axios from "axios";
 import { isDesktop, isMobile } from "react-device-detect";
 import { Health } from "../Health";
@@ -26,6 +31,7 @@ export const Navigation = (props) => {
       padding="0px 20px 0px 20px"
       justifyContent="center"
       alignItems="center"
+      transition={{ backgroundColor: "1000ms ease-in-out"}}
       style={{
         willChange: "transform",
         width: "100vw",
@@ -35,7 +41,7 @@ export const Navigation = (props) => {
         backdropFilter: "blur(8px)",
       }}
     >
-      <BsHddNetwork color={isDay ? "gray.800" : "white"} />
+      <BsHddNetwork color={isDay ? "#1A202C" : "white"} />
       {isDesktop && (
         <Box marginLeft="10px">
           <Text fontWeight="bold" color={isDay ? "gray.800" : "gray.100"}>
@@ -73,7 +79,7 @@ export const Navigation = (props) => {
         backgroundColor={isDay ? "white" : "gray.800"}
         aria-label="Search database"
         _hover={{ backgroundColor: isDay ? "gray.300" : "gray.700" }}
-        icon={<BsLightbulb />}
+        icon={isDay ? <AiFillBulb /> : <AiOutlineBulb />}
       />
       {props?.health && isDesktop && (
         <Button
