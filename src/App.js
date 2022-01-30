@@ -9,7 +9,8 @@ import { useQuery } from "react-query";
 import { Offline, Online } from "react-detect-offline";
 import { OfflineAlert } from "./components/OfflineAlert/index";
 import { Results } from "./components/Results/index";
-import { ErrorAlert } from './components/ErrorAlert/index';
+import { ErrorAlert } from "./components/ErrorAlert/index";
+import { MobileActions } from './components/MobileActions/index';
 
 const socket = io(`http://${process.env.REACT_APP_SERVER_IP}:5500`);
 
@@ -138,6 +139,7 @@ const App = () => {
         <Offline>
           <OfflineAlert setError={setError} />
         </Offline>
+        <MobileActions setShowDefaults={setShowDefaults} />
       </Box>
     );
   }, [

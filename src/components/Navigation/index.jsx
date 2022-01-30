@@ -32,36 +32,38 @@ export const Navigation = (props) => {
       }}
     >
       <BsHddNetwork color={isDay ? "#1A202C" : "white"} />
-      {isDesktop && (
-        <Box marginLeft="10px">
-          <Text fontWeight="bold" color={isDay ? "gray.800" : "gray.100"}>
-            Network Monitor
-          </Text>
-        </Box>
-      )}
+      <Box marginLeft="10px">
+        <Text fontWeight="bold" color={isDay ? "gray.800" : "gray.100"}>
+          Network Monitor
+        </Text>
+      </Box>
       {isDesktop && <Box flexGrow={1} />}
       {isDesktop && props.health?.download && <Health health={props.health} />}
       <Box flexGrow={1} />
-      <IconButton
-        onClick={() => props.setShowDefaults(true)}
-        variant="ghost"
-        marginRight="3"
-        color={isDay ? "gray.800" : "gray.200"}
-        backgroundColor={isDay ? "white" : "gray.800"}
-        aria-label="Search database"
-        _hover={{ backgroundColor: isDay ? "gray.300" : "gray.700" }}
-        icon={<AiOutlineInfoCircle />}
-      />
-      <IconButton
-        onClick={() => (isDay ? setIsDay(false) : setIsDay(true))}
-        variant="ghost"
-        marginRight="3"
-        color={isDay ? "gray.800" : "gray.200"}
-        backgroundColor={isDay ? "white" : "gray.800"}
-        aria-label="Search database"
-        _hover={{ backgroundColor: isDay ? "gray.300" : "gray.700" }}
-        icon={isDay ? <AiFillBulb /> : <AiOutlineBulb />}
-      />
+      {isDesktop && (
+        <>
+          <IconButton
+            onClick={() => props.setShowDefaults(true)}
+            variant="ghost"
+            marginRight="3"
+            color={isDay ? "gray.800" : "gray.200"}
+            backgroundColor={isDay ? "white" : "gray.800"}
+            aria-label="Search database"
+            _hover={{ backgroundColor: isDay ? "gray.300" : "gray.700" }}
+            icon={<AiOutlineInfoCircle />}
+          />
+          <IconButton
+            onClick={() => (isDay ? setIsDay(false) : setIsDay(true))}
+            variant="ghost"
+            marginRight="3"
+            color={isDay ? "gray.800" : "gray.200"}
+            backgroundColor={isDay ? "white" : "gray.800"}
+            aria-label="Search database"
+            _hover={{ backgroundColor: isDay ? "gray.300" : "gray.700" }}
+            icon={isDay ? <AiFillBulb /> : <AiOutlineBulb />}
+          />
+        </>
+      )}
       {props?.health && isDesktop && (
         <Button
           isLoading={props.isTesting}
