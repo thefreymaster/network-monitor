@@ -170,6 +170,7 @@ export const SpeedTests = (props: {
       >
         <LineGraph
           title="Download"
+          type="download"
           color={GREY}
           data={[
             {
@@ -184,6 +185,7 @@ export const SpeedTests = (props: {
         />
         <LineGraph
           title="Upload"
+          type="upload"
           color={GREEN}
           data={[
             {
@@ -198,6 +200,7 @@ export const SpeedTests = (props: {
         />
         <LineGraph
           title="Jitter"
+          type="jitter"
           color={ORANGE}
           data={[
             {
@@ -212,6 +215,7 @@ export const SpeedTests = (props: {
         />
         <LineGraph
           title="Ping"
+          type="ping"
           color={RED}
           data={[
             {
@@ -251,7 +255,7 @@ export const SpeedTests = (props: {
             Anomalies
           </Text>
           <TestTable
-            caption="Today's anomalies"
+            caption="Past seven days anomalies"
             type="anomaly"
             data={props.anomalies}
           />
@@ -280,7 +284,7 @@ export const SpeedTests = (props: {
             Tests
           </Text>
           <TestTable
-            caption="Today's tests"
+            caption="Past seven days tests"
             type="tests"
             data={props.data.tests}
           />

@@ -2,6 +2,7 @@ import { Box, Text, Fade, Tooltip } from '@chakra-ui/react';
 import { GREEN, GREY, ORANGE, RED } from '../../constants';
 import { useIsDay } from '../../providers/IsDayProvider';
 import { Dot } from '../Dot';
+import { getIcon } from '../TestTable';
 
 export const Health = (props: {
     health: {
@@ -18,7 +19,8 @@ export const Health = (props: {
             <Tooltip hasArrow label='Download Health'>
                 <Fade in>
                     <Box display="flex" flexDir="row" alignItems="center" justifyContent="center">
-                        <Dot style={{ marginRight: 5 }} color={GREY} />
+                        {/* <Dot style={{ marginRight: 5 }} color={GREY} /> */}
+                        {getIcon("download")}
                         <Text fontWeight="medium" fontSize="small" color={isDay ? 'gray.800' : 'gray.100'}>{props.health?.download?.toFixed(0)}%</Text>
                     </Box>
                 </Fade>
@@ -28,7 +30,8 @@ export const Health = (props: {
             <Tooltip hasArrow label='Upload Health'>
                 <Fade in>
                     <Box display="flex" flexDir="row" alignItems="center" justifyContent="center">
-                        <Dot style={{ marginRight: 5 }} color={GREEN} />
+                        {/* <Dot style={{ marginRight: 5 }} color={GREEN} /> */}
+                        {getIcon("upload")}
                         <Text fontWeight="medium" fontSize="small" color={isDay ? 'gray.800' : 'gray.100'}>{props.health?.upload?.toFixed(0)}%</Text>
                     </Box>
                 </Fade>

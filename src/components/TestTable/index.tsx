@@ -26,7 +26,10 @@ const getColor = (type: string) => {
   return colors.get(type);
 };
 
-export const getIcon = (type: string, fontSize?: number) => {
+export const getIcon = (
+  type: "download" | "upload" | "jitter" | "ping" | "offline",
+  fontSize?: number
+) => {
   const colors = new Map();
   colors.set(
     "download",

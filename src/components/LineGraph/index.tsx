@@ -4,6 +4,7 @@ import { Box, Text } from "@chakra-ui/react";
 import { isMobile } from "react-device-detect";
 import { Dot } from "../Dot";
 import { useIsDay } from "../../providers/IsDayProvider";
+import { getIcon } from "../TestTable";
 
 const getUnit = (type: string) => {
   const colors = new Map();
@@ -37,6 +38,7 @@ export const LineGraph = (props: {
   data: any;
   title: string;
   color: string;
+  type: "download" | "upload" | "jitter" | "ping" | "offline",
 }) => {
   const { isDay } = useIsDay();
 
@@ -63,7 +65,8 @@ export const LineGraph = (props: {
         alignItems="center"
       >
         <Box display="flex" flexDir="row" alignItems="center">
-          <Dot color={props.color} />
+          {/* <Dot color={props.color} /> */}
+          {getIcon(props.type)}
           {/* <Icon type={props.title.toLowerCase()} /> */}
         </Box>
         <Box marginLeft="1" color={isDay ? "gray.800" : "gray.100"}>
@@ -86,6 +89,7 @@ export const LineGraph = (props: {
         axisBottom={null}
         colors={[props.color]}
         crosshairType="x"
+        lineWidth={3}
       />
     </Box>
   );
