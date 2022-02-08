@@ -74,13 +74,12 @@ const getAverages = (tests) => {
 };
 
 const checkForAnomaly = async (test) => {
-  let sevenDaysAgo = new Date();
-  sevenDaysAgo.setHours(0, 0, 0, 0);
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 15);
+  let todayMidnight = new Date();
+  todayMidnight.setHours(0, 0, 0, 0);
   const anomalies = db
     .getData("/")
     ?.anomaly.filter(
-      (test) => new Date(test.timestamp).getTime() > sevenDaysAgo.getTime()
+      (test) => new Date(test.timestamp).getTime() > todayMidnight.getTime()
     );
   const averages = db.getData("/")?.averages;
   const defaults = db.getData("/")?.defaults;
@@ -113,14 +112,13 @@ const checkForAnomaly = async (test) => {
 };
 
 const getHealth = async () => {
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setHours(0, 0, 0, 0);
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 15);
+  const todayMidnight = new Date();
+  todayMidnight.setHours(0, 0, 0, 0);
   const defaults = await db.getData("/")?.defaults;
   const tests = await db
     .getData("/")
     ?.tests.filter(
-      (test) => new Date(test.timestamp).getTime() > sevenDaysAgo.getTime()
+      (test) => new Date(test.timestamp).getTime() > todayMidnight.getTime()
     );
   const averages = await getAverages(tests);
   const health = {
@@ -148,13 +146,12 @@ const runSingleSpeedTest = async () => {
     await db.push("/tests", [result], false);
     checkForAnomaly(result);
     console.log(result);
-    let sevenDaysAgo = new Date();
-    sevenDaysAgo.setHours(0, 0, 0, 0);
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 15);
+    let todayMidnight = new Date();
+    todayMidnight.setHours(0, 0, 0, 0);
     const tests = db
       .getData("/")
       ?.tests.filter(
-        (test) => new Date(test.timestamp).getTime() > sevenDaysAgo.getTime()
+        (test) => new Date(test.timestamp).getTime() > todayMidnight.getTime()
       )
       .reverse();
     const averages = getAverages(tests);
@@ -181,13 +178,12 @@ const runSpeedTest = async () => {
     await db.push("/tests", [result], false);
     checkForAnomaly(result);
     console.log(result);
-    let sevenDaysAgo = new Date();
-    sevenDaysAgo.setHours(0, 0, 0, 0);
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 15);
+    let todayMidnight = new Date();
+    todayMidnight.setHours(0, 0, 0, 0);
     const tests = db
       .getData("/")
       ?.tests.filter(
-        (test) => new Date(test.timestamp).getTime() > sevenDaysAgo.getTime()
+        (test) => new Date(test.timestamp).getTime() > todayMidnight.getTime()
       );
 
     const averages = getAverages(tests);
@@ -230,13 +226,12 @@ app.use(express.static(__dirname + "/build"));
 app.use(express.json());
 
 app.get("/api/tests", function (req, res) {
-  let sevenDaysAgo = new Date();
-  sevenDaysAgo.setHours(0, 0, 0, 0);
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 15);
+  let todayMidnight = new Date();
+  todayMidnight.setHours(0, 0, 0, 0);
   const tests = db
     .getData("/")
     ?.tests.filter(
-      (test) => new Date(test.timestamp).getTime() > sevenDaysAgo.getTime()
+      (test) => new Date(test.timestamp).getTime() > todayMidnight.getTime()
     );
   const averages = getAverages(tests);
   return res.send({ tests, averages });
@@ -248,13 +243,12 @@ app.get("/api/testing/status", function (req, res) {
 });
 
 app.get("/api/testing/anomalies", function (req, res) {
-  let sevenDaysAgo = new Date();
-  sevenDaysAgo.setHours(0, 0, 0, 0);
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 15);
+  let todayMidnight = new Date();
+  todayMidnight.setHours(0, 0, 0, 0);
   const anomalies = db
     .getData("/")
     ?.anomaly.filter(
-      (test) => new Date(test.timestamp).getTime() > sevenDaysAgo.getTime()
+      (test) => new Date(test.timestamp).getTime() > todayMidnight.getTime()
     );
   return res.send(anomalies);
 });
