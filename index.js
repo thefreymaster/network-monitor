@@ -5,6 +5,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const speedTest = require("speedtest-net");
 
+require('newrelic');
 require("dotenv").config();
 
 const db = new JsonDB(new Config("speedtests", true, true, "/"));
