@@ -10,7 +10,7 @@ In the project directory, you can run:
 
 ### `node index.js`
 
-Runs network-monitor on port 4000
+Runs network-monitor on port 5500
 
 ### `npm run start`
 
