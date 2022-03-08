@@ -2,8 +2,7 @@
 
 Network testing utility that runs a speedtest every five minutes, and pushes data to React front end
 
-<img width="1449" alt="Screen Shot 2022-01-09 at 1 12 47 PM" src="https://user-images.githubusercontent.com/28308815/148694885-d8ada7c6-a437-49ce-aa33-2dd65bf84674.png">
-
+<img width="1792" alt="Screen Shot 2022-03-08 at 11 09 30 AM" src="https://user-images.githubusercontent.com/28308815/157277658-45029330-6cb3-47f1-b6da-ead532cc46dc.png">
 
 ## Available Scripts
 
