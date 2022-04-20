@@ -4,18 +4,23 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from '@chakra-ui/react';
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from 'react-query';
+import theme from './theme';
+import registerServiceWorker from './serviceWorker';
+import { IsDayProvider } from './providers/IsDayProvider';
 
 const queryClient = new QueryClient()
 
 ReactDOM.render(
 
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ChakraProvider>
-        <App />
-      </ChakraProvider>
-    </QueryClientProvider>
+    <IsDayProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <ChakraProvider>
+          <App />
+        </ChakraProvider>
+      </QueryClientProvider>
+    </IsDayProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
@@ -24,3 +29,5 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+registerServiceWorker();
+
